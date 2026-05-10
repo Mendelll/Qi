@@ -1,0 +1,1773 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>奇仔的数据面板</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f4ef;
+      --panel: #fffdf8;
+      --ink: #1f2428;
+      --muted: #6b7280;
+      --line: #e7e0d4;
+      --red: #e84855;
+      --red-dark: #bd2635;
+      --green: #148f77;
+      --blue: #2f6fbe;
+      --yellow: #c68a14;
+      --shadow: 0 12px 32px rgba(33, 29, 23, .08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 264px 1fr;
+    }
+
+    aside {
+      border-right: 1px solid var(--line);
+      background: #fffaf1;
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: var(--red);
+      color: white;
+      font-weight: 800;
+      letter-spacing: 0;
+      box-shadow: var(--shadow);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 17px;
+    }
+
+    .brand span,
+    .filter-label,
+    .table-meta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav button,
+    .tool-button,
+    .seg button {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ink);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .nav button {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      text-align: left;
+    }
+
+    .nav button.active,
+    .nav button:hover {
+      background: white;
+      border-color: var(--line);
+      box-shadow: 0 4px 14px rgba(33, 29, 23, .05);
+    }
+
+    .nav svg,
+    .tool-button svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+      flex: 0 0 auto;
+    }
+
+    .filters {
+      margin-top: 28px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    select,
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 8px;
+      height: 40px;
+      padding: 0 11px;
+      color: var(--ink);
+      outline: none;
+    }
+
+    main {
+      padding: 26px;
+      min-width: 0;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0 0 7px;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tool-button {
+      height: 40px;
+      padding: 0 12px;
+      border-color: var(--line);
+      background: var(--panel);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .tool-button.primary {
+      color: white;
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .kpi,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi {
+      padding: 18px;
+      min-height: 126px;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .kpi-title {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .kpi-value {
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 800;
+      margin-top: 13px;
+    }
+
+    .delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--green);
+      margin-top: 12px;
+    }
+
+    .delta.down {
+      color: var(--red-dark);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .panel {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 16px 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    h2 {
+      font-size: 16px;
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .seg {
+      display: inline-grid;
+      grid-auto-flow: column;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .seg button {
+      height: 32px;
+      padding: 0 11px;
+      border-radius: 0;
+      font-size: 13px;
+      border-right: 1px solid var(--line);
+    }
+
+    .seg button:last-child {
+      border-right: 0;
+    }
+
+    .seg button.active {
+      background: var(--ink);
+      color: white;
+    }
+
+    .chart-wrap {
+      height: 316px;
+      padding: 10px 12px 16px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .side-list {
+      padding: 8px 18px 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .rank-item {
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .rank-item:last-child {
+      border-bottom: 0;
+    }
+
+    .rank {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: #f3e8db;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .note-title {
+      font-weight: 700;
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .note-stat {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .score {
+      font-weight: 800;
+      color: var(--red-dark);
+    }
+
+    .empty-state {
+      min-height: 140px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.7;
+      padding: 24px;
+    }
+
+    .load-status {
+      margin-top: 8px;
+      color: var(--yellow);
+      font-size: 13px;
+    }
+
+    .lower {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .workspace {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .9fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .plan-board,
+    .idea-grid {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .plan-row {
+      display: grid;
+      grid-template-columns: 92px 1fr 96px;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+    }
+
+    .plan-date {
+      color: var(--red-dark);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .plan-title,
+    .idea-title {
+      font-weight: 800;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .plan-meta,
+    .idea-meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+      outline: none;
+    }
+
+    .status-pill {
+      height: 28px;
+      border-radius: 999px;
+      display: inline-grid;
+      place-items: center;
+      padding: 0 10px;
+      background: #eef7f4;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      justify-self: end;
+    }
+
+    .status-pill.warm {
+      background: #fff1d6;
+      color: var(--yellow);
+    }
+
+    .idea-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .idea-card {
+      min-height: 126px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      padding: 14px;
+      display: grid;
+      align-content: space-between;
+      gap: 14px;
+    }
+
+    .idea-tag {
+      width: fit-content;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 9px;
+      background: #f3e8db;
+      color: #66503f;
+      font-size: 12px;
+    }
+
+    .table-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search {
+      width: 220px;
+    }
+
+    .table-scroll {
+      overflow: auto;
+      padding: 4px 18px 18px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 820px;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    tbody tr:hover {
+      background: #fff7ea;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      border-radius: 999px;
+      padding: 0 9px;
+      background: #f3e8db;
+      color: #66503f;
+      font-size: 12px;
+    }
+
+    .bar-cell {
+      display: grid;
+      grid-template-columns: minmax(90px, 1fr) 64px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .mini-bar {
+      height: 8px;
+      background: #eee5d8;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .mini-bar span {
+      display: block;
+      height: 100%;
+      background: var(--red);
+      border-radius: inherit;
+    }
+
+    .drawer {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: min(980px, calc(100vw - 36px));
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+      background: #201e1b;
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, .22);
+      padding: 16px;
+      display: none;
+      z-index: 5;
+    }
+
+    .drawer.open {
+      display: block;
+    }
+
+    .drawer h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .drawer p {
+      margin: 0 0 12px;
+      color: #c9c0b8;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .import-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .import-grid label {
+      display: grid;
+      gap: 6px;
+      color: #c9c0b8;
+      font-size: 12px;
+    }
+
+    .import-grid input,
+    .import-grid select {
+      background: #2d2924;
+      border-color: #514b43;
+      color: white;
+    }
+
+    .import-table-wrap {
+      max-height: 360px;
+      overflow: auto;
+      border: 1px solid #514b43;
+      border-radius: 8px;
+      background: #2d2924;
+    }
+
+    .import-table {
+      min-width: 920px;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .import-table th,
+    .import-table td {
+      border-bottom: 1px solid #514b43;
+      padding: 8px;
+      white-space: nowrap;
+    }
+
+    .import-table th {
+      position: sticky;
+      top: 0;
+      background: #201e1b;
+      color: #c9c0b8;
+      cursor: default;
+      z-index: 1;
+    }
+
+    .import-table input,
+    .import-table select {
+      height: 32px;
+      min-width: 86px;
+      border-color: #514b43;
+      background: #201e1b;
+      color: white;
+      border-radius: 6px;
+      padding: 0 8px;
+    }
+
+    .import-table .wide-input {
+      min-width: 190px;
+    }
+
+    .import-table .small-input {
+      min-width: 76px;
+    }
+
+    .row-delete {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    details.import-advanced {
+      margin-top: 10px;
+      color: #c9c0b8;
+      font-size: 13px;
+    }
+
+    details.import-advanced summary {
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+
+    .drawer textarea {
+      width: 100%;
+      height: 140px;
+      resize: vertical;
+      border: 1px solid #514b43;
+      border-radius: 8px;
+      background: #2d2924;
+      color: white;
+      padding: 10px;
+      font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .drawer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .drawer-actions div {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .drawer button {
+      border: 1px solid #5f574f;
+      background: transparent;
+      color: white;
+      border-radius: 8px;
+      height: 34px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .drawer button.primary {
+      border-color: var(--red);
+      background: var(--red);
+    }
+
+    @media (max-width: 980px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .filters {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .kpis,
+      .grid,
+      .workspace {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      main {
+        padding: 18px 14px;
+      }
+
+      .topbar,
+      .panel-head {
+        display: grid;
+      }
+
+      .actions,
+      .table-tools,
+      .drawer-actions {
+        justify-content: flex-start;
+      }
+
+      .import-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filters,
+      .kpis,
+      .grid,
+      .workspace,
+      .idea-grid,
+      .plan-row,
+      .nav {
+        grid-template-columns: 1fr;
+      }
+
+      .status-pill {
+        justify-self: start;
+      }
+
+      .search {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="brand-mark">奇</div>
+        <div>
+          <strong>奇仔的数据面板</strong>
+          <span>小红书运营工作台</span>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="数据视图">
+        <button class="active" type="button" data-view="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 13h8V3H3v10Z"/><path d="M13 21h8V11h-8v10Z"/><path d="M13 3v6h8V3h-8Z"/><path d="M3 21h8v-6H3v6Z"/></svg>
+          总览
+        </button>
+        <button type="button" data-view="growth">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
+          涨粉
+        </button>
+        <button type="button" data-view="notes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16v16H4z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg>
+          笔记
+        </button>
+        <button type="button" data-view="shooting">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7h16v12H4z"/><path d="m8 7 2-3h4l2 3"/><circle cx="12" cy="13" r="3"/></svg>
+          拍摄计划
+        </button>
+        <button type="button" data-view="ideas">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.74V16h8v-1.26A7 7 0 0 0 12 2Z"/></svg>
+          灵感
+        </button>
+      </nav>
+
+      <div class="filters">
+        <label class="field">
+          <span class="filter-label">时间范围</span>
+          <select id="rangeSelect">
+            <option value="7">近 7 天</option>
+            <option value="30" selected>近 30 天</option>
+            <option value="90">近 90 天</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="filter-label">内容类型</span>
+          <select id="typeSelect">
+            <option value="all" selected>全部</option>
+            <option value="图文">图文</option>
+            <option value="视频">视频</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="filter-label">排序指标</span>
+          <select id="metricSelect">
+            <option value="reads" selected>阅读量</option>
+            <option value="likes">点赞数</option>
+            <option value="collects">收藏数</option>
+            <option value="comments">评论数</option>
+          </select>
+        </label>
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <h1>奇仔的数据面板</h1>
+          <p class="subtitle" id="periodText">等待手动导入数据</p>
+          <p class="load-status" id="loadStatus">点击右上角导入 CSV 或 JSON</p>
+        </div>
+        <div class="actions">
+          <button class="tool-button" type="button" id="importButton" title="手动导入数据">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 15v4h14v-4"/></svg>
+            导入
+          </button>
+          <button class="tool-button primary" type="button" id="exportButton" title="下载当前表格 CSV">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 19h14"/></svg>
+            导出 CSV
+          </button>
+        </div>
+      </div>
+
+      <section class="kpis" aria-label="关键指标">
+        <article class="kpi">
+          <div>
+            <div class="kpi-title">总粉丝</div>
+            <div class="kpi-value" id="fansValue">0</div>
+          </div>
+          <div class="delta" id="fansDelta">+0 近 30 天</div>
+        </article>
+        <article class="kpi">
+          <div>
+            <div class="kpi-title">总阅读</div>
+            <div class="kpi-value" id="readsValue">0</div>
+          </div>
+          <div class="delta" id="readsDelta">+0%</div>
+        </article>
+        <article class="kpi">
+          <div>
+            <div class="kpi-title">互动率</div>
+            <div class="kpi-value" id="engageValue">0%</div>
+          </div>
+          <div class="delta" id="engageDelta">+0%</div>
+        </article>
+        <article class="kpi">
+          <div>
+            <div class="kpi-title">发布笔记</div>
+            <div class="kpi-value" id="notesValue">0</div>
+          </div>
+          <div class="delta" id="notesDelta">本周期发布</div>
+        </article>
+      </section>
+
+      <section class="grid">
+        <article class="panel">
+          <div class="panel-head">
+            <h2>涨粉与阅读趋势</h2>
+            <div class="seg" role="tablist" aria-label="趋势指标">
+              <button class="active" type="button" data-chart="followers">涨粉</button>
+              <button type="button" data-chart="reads">阅读</button>
+              <button type="button" data-chart="engagement">互动</button>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="trendChart" width="900" height="360" aria-label="趋势图"></canvas>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <h2>爆款笔记排行</h2>
+            <span class="table-meta" id="rankMetric">按阅读量</span>
+          </div>
+          <div class="side-list" id="rankList"></div>
+        </article>
+      </section>
+
+      <section class="lower">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>单篇笔记数据</h2>
+              <span class="table-meta" id="tableMeta">0 条笔记</span>
+            </div>
+            <div class="table-tools">
+              <input class="search" id="searchInput" type="search" placeholder="搜索标题或标签">
+              <div class="seg" aria-label="表格指标">
+                <button class="active" type="button" data-sort="reads">阅读</button>
+                <button type="button" data-sort="likes">点赞</button>
+                <button type="button" data-sort="collects">收藏</button>
+              </div>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th data-key="date">发布日期</th>
+                  <th data-key="title">笔记标题</th>
+                  <th data-key="type">类型</th>
+                  <th data-key="reads">阅读量</th>
+                  <th data-key="likes">点赞</th>
+                  <th data-key="collects">收藏</th>
+                  <th data-key="comments">评论</th>
+                  <th data-key="shares">分享</th>
+                  <th data-key="engagementRate">互动率</th>
+                </tr>
+              </thead>
+              <tbody id="notesBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <article class="panel" id="shootingSection">
+          <div class="panel-head">
+            <div>
+              <h2>拍摄计划</h2>
+              <span class="table-meta">近期内容排期</span>
+            </div>
+          </div>
+          <div class="plan-board">
+            <div class="plan-row">
+              <div class="plan-date" contenteditable="true">05/12</div>
+              <div>
+                <div class="plan-title" contenteditable="true">通勤包开箱：3 个场景补拍</div>
+                <div class="plan-meta" contenteditable="true">镜头：桌面俯拍、出门前、地铁口封面</div>
+              </div>
+              <span class="status-pill warm">待拍摄</span>
+            </div>
+            <div class="plan-row">
+              <div class="plan-date" contenteditable="true">05/14</div>
+              <div>
+                <div class="plan-title" contenteditable="true">小户型收纳复盘</div>
+                <div class="plan-meta" contenteditable="true">素材：前后对比、预算清单、避坑点</div>
+              </div>
+              <span class="status-pill">剪辑中</span>
+            </div>
+            <div class="plan-row">
+              <div class="plan-date" contenteditable="true">05/17</div>
+              <div>
+                <div class="plan-title" contenteditable="true">周末一人食菜单</div>
+                <div class="plan-meta" contenteditable="true">脚本：开头 3 秒钩子 + 成品近景</div>
+              </div>
+              <span class="status-pill warm">待脚本</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="ideasSection">
+          <div class="panel-head">
+            <div>
+              <h2>灵感</h2>
+              <span class="table-meta">选题和标题池</span>
+            </div>
+          </div>
+          <div class="idea-grid">
+            <div class="idea-card">
+              <div>
+                <div class="idea-title" contenteditable="true">把爆款笔记拆成 5 个封面模板</div>
+                <div class="idea-meta" contenteditable="true">角度：标题结构、首图构图、评论区追问</div>
+              </div>
+              <span class="idea-tag">复盘</span>
+            </div>
+            <div class="idea-card">
+              <div>
+                <div class="idea-title" contenteditable="true">普通女生低成本变精致的一周实验</div>
+                <div class="idea-meta" contenteditable="true">角度：预算、前后变化、真实执行难度</div>
+              </div>
+              <span class="idea-tag">系列</span>
+            </div>
+            <div class="idea-card">
+              <div>
+                <div class="idea-title" contenteditable="true">评论区高频问题做成答疑合集</div>
+                <div class="idea-meta" contenteditable="true">角度：截图问题、逐条回应、可收藏清单</div>
+              </div>
+              <span class="idea-tag">互动</span>
+            </div>
+            <div class="idea-card">
+              <div>
+                <div class="idea-title" contenteditable="true">同一选题图文和视频的数据对比</div>
+                <div class="idea-meta" contenteditable="true">角度：阅读、完播、收藏理由、下次优化</div>
+              </div>
+              <span class="idea-tag">数据</span>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div class="drawer" id="importDrawer">
+    <h3>手动导入数据</h3>
+    <p>在表格里直接填写或修改数据。每一行是一条笔记，粉丝数填当天账号总粉丝即可。</p>
+    <div class="import-grid">
+      <label>
+        <span>辅助导入格式</span>
+        <select id="importFormat">
+          <option value="csv" selected>CSV 表格</option>
+          <option value="json">JSON 数据</option>
+        </select>
+      </label>
+      <label>
+        <span>上传文件</span>
+        <input id="importFile" type="file" accept=".csv,.json,text/csv,application/json">
+      </label>
+    </div>
+    <div class="import-table-wrap">
+      <table class="import-table">
+        <thead>
+          <tr>
+            <th>发布日期</th>
+            <th>笔记标题</th>
+            <th>类型</th>
+            <th>标签</th>
+            <th>阅读量</th>
+            <th>点赞</th>
+            <th>收藏</th>
+            <th>评论</th>
+            <th>分享</th>
+            <th>粉丝数</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="importRows"></tbody>
+      </table>
+    </div>
+    <details class="import-advanced">
+      <summary>粘贴 CSV / JSON</summary>
+      <textarea id="importText" spellcheck="false" placeholder="把 CSV 或 JSON 粘贴到这里"></textarea>
+    </details>
+    <div class="drawer-actions">
+      <div>
+        <button type="button" id="addImportRow">新增一行</button>
+        <button type="button" id="templateImport">填入示例</button>
+        <button type="button" id="parseImportText">从粘贴内容生成表格</button>
+        <button type="button" id="clearImport">清空</button>
+      </div>
+      <div>
+        <button type="button" id="closeImport">取消</button>
+        <button type="button" class="primary" id="applyImport">应用数据</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const emptyData = {
+      account: "小红书主页",
+      sourceUrl: "",
+      updatedAt: "",
+      status: "manual",
+      message: "还没有导入数据。点击右上角导入 CSV 或 JSON。",
+      daily: [],
+      notes: []
+    };
+
+    let data = structuredClone(emptyData);
+    let currentChart = "followers";
+    let sortKey = "reads";
+    let sortDir = "desc";
+
+    const els = {
+      range: document.querySelector("#rangeSelect"),
+      type: document.querySelector("#typeSelect"),
+      metric: document.querySelector("#metricSelect"),
+      period: document.querySelector("#periodText"),
+      loadStatus: document.querySelector("#loadStatus"),
+      fansValue: document.querySelector("#fansValue"),
+      fansDelta: document.querySelector("#fansDelta"),
+      readsValue: document.querySelector("#readsValue"),
+      readsDelta: document.querySelector("#readsDelta"),
+      engageValue: document.querySelector("#engageValue"),
+      engageDelta: document.querySelector("#engageDelta"),
+      notesValue: document.querySelector("#notesValue"),
+      rankList: document.querySelector("#rankList"),
+      rankMetric: document.querySelector("#rankMetric"),
+      notesBody: document.querySelector("#notesBody"),
+      tableMeta: document.querySelector("#tableMeta"),
+      search: document.querySelector("#searchInput"),
+      canvas: document.querySelector("#trendChart"),
+      drawer: document.querySelector("#importDrawer"),
+      importRows: document.querySelector("#importRows"),
+      importText: document.querySelector("#importText"),
+      importFormat: document.querySelector("#importFormat"),
+      importFile: document.querySelector("#importFile")
+    };
+
+    const importColumns = ["date", "title", "type", "tag", "reads", "likes", "collects", "comments", "shares", "followers"];
+    const templateRows = [
+      { date: "2026-05-10", title: "示例笔记标题", type: "图文", tag: "标签", reads: 12000, likes: 600, collects: 300, comments: 40, shares: 20, followers: 1500 },
+      { date: "2026-05-11", title: "第二篇笔记", type: "视频", tag: "标签", reads: 24000, likes: 1200, collects: 680, comments: 90, shares: 50, followers: 1580 }
+    ];
+    const csvTemplate = [
+      importColumns.join(","),
+      ...templateRows.map(row => importColumns.map(key => row[key]).join(","))
+    ].join("\n");
+
+    const metricNames = {
+      reads: "阅读量",
+      likes: "点赞数",
+      collects: "收藏数",
+      comments: "评论数",
+      shares: "分享数",
+      engagementRate: "互动率"
+    };
+
+    function fmt(value) {
+      if (!Number.isFinite(Number(value))) return "0";
+      value = Number(value);
+      if (Math.abs(value) >= 10000) return `${(value / 10000).toFixed(value >= 100000 ? 1 : 2)}万`;
+      return new Intl.NumberFormat("zh-CN").format(Math.round(value));
+    }
+
+    function pct(value) {
+      return `${(value * 100).toFixed(1)}%`;
+    }
+
+    function selectedDaily() {
+      const days = Number(els.range.value);
+      return Array.isArray(data.daily) ? data.daily.slice(-days) : [];
+    }
+
+    function noteEngagement(note) {
+      return note.reads ? ((note.likes || 0) + (note.collects || 0) + (note.comments || 0) + (note.shares || 0)) / note.reads : 0;
+    }
+
+    function selectedNotes() {
+      const days = Number(els.range.value);
+      const type = els.type.value;
+      const daily = Array.isArray(data.daily) ? data.daily : [];
+      const notes = Array.isArray(data.notes) ? data.notes : [];
+      const thresholdValue = daily.at(-days)?.date || daily[0]?.date;
+      const threshold = thresholdValue ? new Date(thresholdValue) : null;
+      const query = els.search.value.trim().toLowerCase();
+      return notes
+        .filter(note => type === "all" || note.type === type)
+        .filter(note => !threshold || !note.date || new Date(note.date) >= threshold)
+        .filter(note => !query || String(note.title || "").toLowerCase().includes(query) || String(note.tag || "").toLowerCase().includes(query))
+        .map(note => normalizeNote(note));
+    }
+
+    function normalizeNote(note) {
+      const normalized = {
+        date: note.date || "",
+        title: note.title || "未命名笔记",
+        type: note.type || "未知",
+        tag: note.tag || "",
+        reads: Number(note.reads || 0),
+        likes: Number(note.likes || 0),
+        collects: Number(note.collects || 0),
+        comments: Number(note.comments || 0),
+        shares: Number(note.shares || 0)
+      };
+      return { ...normalized, engagementRate: noteEngagement(normalized) };
+    }
+
+    function toNumber(value) {
+      if (value === undefined || value === null || value === "") return 0;
+      const text = String(value).trim().replace(/,/g, "");
+      const match = text.match(/^(-?\d+(?:\.\d+)?)(万|w|W|k|K)?$/);
+      if (!match) return Number(text) || 0;
+      const num = Number(match[1]);
+      const unit = match[2];
+      if (unit === "万" || unit === "w" || unit === "W") return Math.round(num * 10000);
+      if (unit === "k" || unit === "K") return Math.round(num * 1000);
+      return num;
+    }
+
+    function hasRealData() {
+      return selectedDaily().length > 0 || selectedNotes().length > 0;
+    }
+
+    function renderKpis() {
+      const daily = selectedDaily();
+      const notes = selectedNotes();
+      const first = daily[0] || { followers: 0 };
+      const last = daily.at(-1) || { followers: 0 };
+      const reads = notes.reduce((sum, note) => sum + note.reads, 0);
+      const interactions = notes.reduce((sum, note) => sum + note.likes + note.collects + note.comments + note.shares, 0);
+      const followersDelta = last.followers - first.followers;
+      const engagement = reads ? interactions / reads : 0;
+
+      const updatedAt = data.updatedAt ? `，更新于 ${data.updatedAt}` : "";
+      els.period.textContent = `${data.account || "小红书主页"} · 近 ${els.range.value} 天${updatedAt}`;
+      els.loadStatus.textContent = data.message || (hasRealData() ? "已加载手动导入数据" : "暂无导入数据");
+      els.fansValue.textContent = fmt(last.followers);
+      els.fansDelta.textContent = daily.length > 1 ? `${followersDelta >= 0 ? "+" : ""}${fmt(followersDelta)} 近 ${els.range.value} 天` : "导入多天粉丝数后对比";
+      els.readsValue.textContent = fmt(reads);
+      els.readsDelta.textContent = notes.length ? "当前筛选结果" : "导入阅读量后显示";
+      els.readsDelta.classList.remove("down");
+      els.engageValue.textContent = pct(engagement);
+      els.engageDelta.textContent = notes.length ? `${fmt(interactions)} 次互动` : "暂无笔记互动数据";
+      els.notesValue.textContent = notes.length;
+    }
+
+    function drawChart() {
+      const canvas = els.canvas;
+      const ctx = canvas.getContext("2d");
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      ctx.scale(dpr, dpr);
+
+      const width = rect.width;
+      const height = rect.height;
+      ctx.clearRect(0, 0, width, height);
+
+      const daily = selectedDaily();
+      if (!daily.length) {
+        ctx.fillStyle = "#6b7280";
+        ctx.font = "14px -apple-system, BlinkMacSystemFont, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("暂无趋势数据，请先手动导入数据", width / 2, height / 2);
+        return;
+      }
+      const series = daily.map(day => {
+        if (currentChart === "followers") return Number(day.newFollowers || 0);
+        if (currentChart === "reads") return Number(day.reads || 0);
+        const interactions = Number(day.likes || 0) + Number(day.comments || 0) + Number(day.collects || 0);
+        return day.reads ? interactions / day.reads * 100 : 0;
+      });
+
+      const labels = daily.map(day => String(day.date || "").slice(5));
+      const max = Math.max(...series, 1) * 1.18;
+      const min = 0;
+      const pad = { top: 20, right: 22, bottom: 42, left: 56 };
+      const chartW = width - pad.left - pad.right;
+      const chartH = height - pad.top - pad.bottom;
+      const x = index => pad.left + (daily.length <= 1 ? 0 : index * chartW / (daily.length - 1));
+      const y = value => pad.top + chartH - ((value - min) / (max - min)) * chartH;
+
+      ctx.strokeStyle = "#e7e0d4";
+      ctx.lineWidth = 1;
+      ctx.fillStyle = "#6b7280";
+      ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+
+      for (let i = 0; i <= 4; i++) {
+        const value = max * i / 4;
+        const yy = y(value);
+        ctx.beginPath();
+        ctx.moveTo(pad.left, yy);
+        ctx.lineTo(width - pad.right, yy);
+        ctx.stroke();
+        const label = currentChart === "engagement" ? `${value.toFixed(1)}%` : fmt(value);
+        ctx.fillText(label, pad.left - 10, yy);
+      }
+
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      const labelStep = Math.max(1, Math.ceil(labels.length / 6));
+      labels.forEach((label, index) => {
+        if (index % labelStep !== 0 && index !== labels.length - 1) return;
+        ctx.fillText(label, x(index), height - 28);
+      });
+
+      const gradient = ctx.createLinearGradient(0, pad.top, 0, height - pad.bottom);
+      gradient.addColorStop(0, "rgba(232, 72, 85, .28)");
+      gradient.addColorStop(1, "rgba(232, 72, 85, 0)");
+
+      ctx.beginPath();
+      series.forEach((value, index) => {
+        const xx = x(index);
+        const yy = y(value);
+        if (index === 0) ctx.moveTo(xx, yy);
+        else ctx.lineTo(xx, yy);
+      });
+      ctx.lineTo(x(series.length - 1), height - pad.bottom);
+      ctx.lineTo(x(0), height - pad.bottom);
+      ctx.closePath();
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      ctx.beginPath();
+      series.forEach((value, index) => {
+        const xx = x(index);
+        const yy = y(value);
+        if (index === 0) ctx.moveTo(xx, yy);
+        else ctx.lineTo(xx, yy);
+      });
+      ctx.strokeStyle = "#e84855";
+      ctx.lineWidth = 3;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.stroke();
+
+      series.forEach((value, index) => {
+        const xx = x(index);
+        const yy = y(value);
+        ctx.beginPath();
+        ctx.arc(xx, yy, 4, 0, Math.PI * 2);
+        ctx.fillStyle = "#fffdf8";
+        ctx.fill();
+        ctx.strokeStyle = "#e84855";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      });
+    }
+
+    function renderRank() {
+      const metric = els.metric.value;
+      const notes = selectedNotes().sort((a, b) => b[metric] - a[metric]).slice(0, 5);
+      els.rankMetric.textContent = `按${metricNames[metric]}`;
+      if (!notes.length) {
+        els.rankList.innerHTML = `<div class="empty-state">暂无笔记排行数据<br>点击右上角导入 CSV 或 JSON。</div>`;
+        return;
+      }
+      els.rankList.innerHTML = notes.map((note, index) => `
+        <div class="rank-item">
+          <div class="rank">${index + 1}</div>
+          <div>
+            <div class="note-title">${escapeHtml(note.title)}</div>
+            <div class="note-stat">${note.date} · ${note.type} · ${escapeHtml(note.tag)}</div>
+          </div>
+          <div class="score">${metric === "engagementRate" ? pct(note[metric]) : fmt(note[metric])}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderTable() {
+      const notes = selectedNotes().sort((a, b) => {
+        const av = a[sortKey];
+        const bv = b[sortKey];
+        if (av === bv) return 0;
+        return sortDir === "desc" ? bv - av : av - bv;
+      });
+      const maxReads = Math.max(...notes.map(note => note.reads), 1);
+      els.tableMeta.textContent = `${notes.length} 条笔记`;
+      if (!notes.length) {
+        els.notesBody.innerHTML = `
+          <tr>
+            <td colspan="9">
+              <div class="empty-state">暂无单篇笔记数据。小红书主页公开页通常不展示阅读量，真实阅读量可能需要从创作者后台导出后导入。</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      els.notesBody.innerHTML = notes.map(note => `
+        <tr>
+          <td>${note.date}</td>
+          <td>
+            <strong>${escapeHtml(note.title)}</strong>
+            <span class="tag">${escapeHtml(note.tag)}</span>
+          </td>
+          <td>${note.type}</td>
+          <td>
+            <div class="bar-cell">
+              <div class="mini-bar"><span style="width:${Math.max(4, note.reads / maxReads * 100)}%"></span></div>
+              <span>${fmt(note.reads)}</span>
+            </div>
+          </td>
+          <td>${fmt(note.likes)}</td>
+          <td>${fmt(note.collects)}</td>
+          <td>${fmt(note.comments)}</td>
+          <td>${fmt(note.shares)}</td>
+          <td>${pct(note.engagementRate)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[char]);
+    }
+
+    function render() {
+      renderKpis();
+      drawChart();
+      renderRank();
+      renderTable();
+    }
+
+    function normalizeData(nextData) {
+      return {
+        ...emptyData,
+        ...nextData,
+        daily: Array.isArray(nextData.daily) ? nextData.daily : [],
+        notes: Array.isArray(nextData.notes) ? nextData.notes : []
+      };
+    }
+
+    async function loadDataFile() {
+      try {
+        const response = await fetch("/api/dashboard", { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        data = normalizeData(await response.json());
+      } catch (error) {
+        try {
+          const response = await fetch("data/xiaohongshu-dashboard.json", { cache: "no-store" });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          data = normalizeData(await response.json());
+        } catch (fallbackError) {
+          data = structuredClone(emptyData);
+        }
+      }
+      render();
+    }
+
+    async function saveDataFile() {
+      const baseMessage = data.message;
+      try {
+        data.message = `${baseMessage}，已保存到数据库`;
+        const response = await fetch("/api/dashboard", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      } catch (error) {
+        data.message = `${baseMessage}，但数据库服务未连接，本次只在当前页面临时生效`;
+      }
+    }
+
+    function splitCsvLine(line) {
+      const cells = [];
+      let cell = "";
+      let quoted = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const next = line[i + 1];
+        if (char === '"' && quoted && next === '"') {
+          cell += '"';
+          i++;
+        } else if (char === '"') {
+          quoted = !quoted;
+        } else if (char === "," && !quoted) {
+          cells.push(cell.trim());
+          cell = "";
+        } else {
+          cell += char;
+        }
+      }
+      cells.push(cell.trim());
+      return cells;
+    }
+
+    function parseCsv(text) {
+      const lines = text.trim().split(/\r?\n/).filter(Boolean);
+      if (lines.length < 2) throw new Error("CSV 至少需要表头和一行数据");
+      const headers = splitCsvLine(lines[0]).map(header => header.trim());
+      const rows = lines.slice(1).map(line => {
+        const values = splitCsvLine(line);
+        return Object.fromEntries(headers.map((header, index) => [header, values[index] || ""]));
+      });
+      const notes = rows.map(row => normalizeNote({
+        date: row.date || row.发布日期 || row.publishDate,
+        title: row.title || row.标题 || row.笔记标题,
+        type: row.type || row.类型 || "未知",
+        tag: row.tag || row.标签 || "",
+        reads: toNumber(row.reads || row.阅读量),
+        likes: toNumber(row.likes || row.点赞 || row.点赞数),
+        collects: toNumber(row.collects || row.收藏 || row.收藏数),
+        comments: toNumber(row.comments || row.评论 || row.评论数),
+        shares: toNumber(row.shares || row.分享 || row.分享数)
+      }));
+      const dailyByDate = new Map();
+      rows.forEach(row => {
+        const date = row.date || row.日期 || row.发布日期 || row.publishDate;
+        if (!date) return;
+        const previous = dailyByDate.get(date) || { date, followers: 0, reads: 0, likes: 0, comments: 0, collects: 0 };
+        previous.followers = Math.max(previous.followers || 0, toNumber(row.followers || row.粉丝 || row.粉丝数));
+        previous.reads += toNumber(row.reads || row.阅读量);
+        previous.likes += toNumber(row.likes || row.点赞 || row.点赞数);
+        previous.comments += toNumber(row.comments || row.评论 || row.评论数);
+        previous.collects += toNumber(row.collects || row.收藏 || row.收藏数);
+        dailyByDate.set(date, previous);
+      });
+      const daily = [...dailyByDate.values()].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+      daily.forEach((day, index) => {
+        const prev = daily[index - 1];
+        day.newFollowers = prev && day.followers && prev.followers ? day.followers - prev.followers : 0;
+      });
+      return normalizeData({
+        account: "手动导入数据",
+        updatedAt: new Date().toLocaleString("zh-CN"),
+        status: "manual",
+        message: `已手动导入 ${notes.length} 条笔记`,
+        daily,
+        notes
+      });
+    }
+
+    function rowsToData(rows) {
+      const cleanRows = rows
+        .map(row => ({
+          date: row.date || "",
+          title: row.title || "",
+          type: row.type || "图文",
+          tag: row.tag || "",
+          reads: toNumber(row.reads),
+          likes: toNumber(row.likes),
+          collects: toNumber(row.collects),
+          comments: toNumber(row.comments),
+          shares: toNumber(row.shares),
+          followers: toNumber(row.followers)
+        }))
+        .filter(row => row.date || row.title || row.reads || row.likes || row.collects || row.comments || row.shares || row.followers);
+
+      const notes = cleanRows.map(row => normalizeNote(row));
+      const dailyByDate = new Map();
+      cleanRows.forEach(row => {
+        if (!row.date) return;
+        const previous = dailyByDate.get(row.date) || { date: row.date, followers: 0, reads: 0, likes: 0, comments: 0, collects: 0 };
+        previous.followers = Math.max(previous.followers || 0, row.followers || 0);
+        previous.reads += row.reads || 0;
+        previous.likes += row.likes || 0;
+        previous.comments += row.comments || 0;
+        previous.collects += row.collects || 0;
+        dailyByDate.set(row.date, previous);
+      });
+      const daily = [...dailyByDate.values()].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+      daily.forEach((day, index) => {
+        const prev = daily[index - 1];
+        day.newFollowers = prev && day.followers && prev.followers ? day.followers - prev.followers : 0;
+      });
+      return normalizeData({
+        account: "手动导入数据",
+        updatedAt: new Date().toLocaleString("zh-CN"),
+        status: "manual",
+        message: `已手动导入 ${notes.length} 条笔记`,
+        daily,
+        notes
+      });
+    }
+
+    function importRowsFromCurrentData() {
+      const followersByDate = new Map((Array.isArray(data.daily) ? data.daily : []).map(day => [day.date, day.followers || ""]));
+      const rows = selectedNotes().map(note => ({
+        ...note,
+        followers: followersByDate.get(note.date) || ""
+      }));
+      return rows.length ? rows : [emptyImportRow()];
+    }
+
+    function emptyImportRow() {
+      return { date: "", title: "", type: "图文", tag: "", reads: "", likes: "", collects: "", comments: "", shares: "", followers: "" };
+    }
+
+    function renderImportRows(rows) {
+      els.importRows.innerHTML = rows.map(row => `
+        <tr>
+          <td><input data-field="date" value="${escapeHtml(row.date || "")}" placeholder="2026-05-10"></td>
+          <td><input class="wide-input" data-field="title" value="${escapeHtml(row.title || "")}" placeholder="笔记标题"></td>
+          <td>
+            <select data-field="type">
+              <option value="图文" ${row.type === "图文" ? "selected" : ""}>图文</option>
+              <option value="视频" ${row.type === "视频" ? "selected" : ""}>视频</option>
+              <option value="未知" ${row.type === "未知" ? "selected" : ""}>未知</option>
+            </select>
+          </td>
+          <td><input class="small-input" data-field="tag" value="${escapeHtml(row.tag || "")}" placeholder="标签"></td>
+          <td><input class="small-input" data-field="reads" inputmode="numeric" value="${escapeHtml(row.reads || "")}"></td>
+          <td><input class="small-input" data-field="likes" inputmode="numeric" value="${escapeHtml(row.likes || "")}"></td>
+          <td><input class="small-input" data-field="collects" inputmode="numeric" value="${escapeHtml(row.collects || "")}"></td>
+          <td><input class="small-input" data-field="comments" inputmode="numeric" value="${escapeHtml(row.comments || "")}"></td>
+          <td><input class="small-input" data-field="shares" inputmode="numeric" value="${escapeHtml(row.shares || "")}"></td>
+          <td><input class="small-input" data-field="followers" inputmode="numeric" value="${escapeHtml(row.followers || "")}"></td>
+          <td><button class="row-delete" type="button" title="删除这一行" aria-label="删除这一行">×</button></td>
+        </tr>
+      `).join("");
+    }
+
+    function readImportRows() {
+      return [...els.importRows.querySelectorAll("tr")].map(tr => {
+        const row = {};
+        tr.querySelectorAll("[data-field]").forEach(input => {
+          row[input.dataset.field] = input.value.trim();
+        });
+        return row;
+      });
+    }
+
+    function loadParsedDataIntoTable(parsedData) {
+      const normalized = normalizeData(parsedData);
+      const followersByDate = new Map(normalized.daily.map(day => [day.date, day.followers || ""]));
+      const rows = normalized.notes.map(note => ({
+        ...note,
+        followers: followersByDate.get(note.date) || ""
+      }));
+      renderImportRows(rows.length ? rows : [emptyImportRow()]);
+    }
+
+    function exportCsv() {
+      const headers = ["发布日期", "笔记标题", "类型", "标签", "阅读量", "点赞", "收藏", "评论", "分享", "互动率"];
+      const rows = selectedNotes().map(note => [
+        note.date,
+        note.title,
+        note.type,
+        note.tag,
+        note.reads,
+        note.likes,
+        note.collects,
+        note.comments,
+        note.shares,
+        pct(note.engagementRate)
+      ]);
+      const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\n");
+      const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `xiaohongshu-notes-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function openImport() {
+      els.importFormat.value = "csv";
+      els.importText.value = csvTemplate;
+      renderImportRows(importRowsFromCurrentData());
+      els.drawer.classList.add("open");
+    }
+
+    async function applyImport() {
+      try {
+        data = rowsToData(readImportRows());
+        if (!data.notes.length && !data.daily.length) throw new Error("请至少填写一行数据");
+        await saveDataFile();
+        els.drawer.classList.remove("open");
+        render();
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    document.querySelectorAll("[data-chart]").forEach(button => {
+      button.addEventListener("click", () => {
+        currentChart = button.dataset.chart;
+        document.querySelectorAll("[data-chart]").forEach(item => item.classList.toggle("active", item === button));
+        drawChart();
+      });
+    });
+
+    document.querySelectorAll("[data-sort]").forEach(button => {
+      button.addEventListener("click", () => {
+        sortKey = button.dataset.sort;
+        sortDir = "desc";
+        document.querySelectorAll("[data-sort]").forEach(item => item.classList.toggle("active", item === button));
+        renderTable();
+      });
+    });
+
+    document.querySelectorAll("th[data-key]").forEach(th => {
+      th.addEventListener("click", () => {
+        const key = th.dataset.key;
+        if (key === "title" || key === "type") return;
+        sortDir = sortKey === key && sortDir === "desc" ? "asc" : "desc";
+        sortKey = key;
+        renderTable();
+      });
+    });
+
+    document.querySelectorAll(".nav button").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".nav button").forEach(item => item.classList.toggle("active", item === button));
+        const targets = {
+          overview: ".topbar",
+          growth: ".grid",
+          notes: ".lower",
+          shooting: "#shootingSection",
+          ideas: "#ideasSection"
+        };
+        const target = targets[button.dataset.view] || ".topbar";
+        document.querySelector(target).scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    [els.range, els.type, els.metric, els.search].forEach(el => {
+      el.addEventListener("input", render);
+      el.addEventListener("change", render);
+    });
+
+    document.querySelector("#exportButton").addEventListener("click", exportCsv);
+    document.querySelector("#importButton").addEventListener("click", openImport);
+    document.querySelector("#closeImport").addEventListener("click", () => els.drawer.classList.remove("open"));
+    document.querySelector("#applyImport").addEventListener("click", applyImport);
+    document.querySelector("#addImportRow").addEventListener("click", () => {
+      renderImportRows([...readImportRows(), emptyImportRow()]);
+    });
+    document.querySelector("#templateImport").addEventListener("click", () => {
+      els.importFormat.value = "csv";
+      els.importText.value = csvTemplate;
+      renderImportRows(templateRows);
+    });
+    document.querySelector("#parseImportText").addEventListener("click", () => {
+      try {
+        const text = els.importText.value.trim();
+        if (!text) throw new Error("请先粘贴 CSV 或 JSON");
+        const parsed = els.importFormat.value === "json" ? normalizeData(JSON.parse(text)) : parseCsv(text);
+        loadParsedDataIntoTable(parsed);
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+    document.querySelector("#clearImport").addEventListener("click", () => {
+      els.importText.value = "";
+      els.importFile.value = "";
+      renderImportRows([emptyImportRow()]);
+    });
+    els.importFormat.addEventListener("change", () => {
+      els.importText.value = els.importFormat.value === "json" ? JSON.stringify(data, null, 2) : csvTemplate;
+    });
+    els.importFile.addEventListener("change", async () => {
+      const file = els.importFile.files[0];
+      if (!file) return;
+      els.importText.value = await file.text();
+      els.importFormat.value = file.name.toLowerCase().endsWith(".json") ? "json" : "csv";
+      const parsed = els.importFormat.value === "json" ? normalizeData(JSON.parse(els.importText.value)) : parseCsv(els.importText.value);
+      loadParsedDataIntoTable(parsed);
+    });
+    els.importRows.addEventListener("click", event => {
+      if (!event.target.classList.contains("row-delete")) return;
+      const nextRows = readImportRows();
+      const rowIndex = [...els.importRows.querySelectorAll("tr")].indexOf(event.target.closest("tr"));
+      nextRows.splice(rowIndex, 1);
+      renderImportRows(nextRows.length ? nextRows : [emptyImportRow()]);
+    });
+    window.addEventListener("resize", drawChart);
+
+    loadDataFile();
+  </script>
+</body>
+</html>
