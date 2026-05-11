@@ -548,6 +548,28 @@
       line-height: 1.55;
     }
 
+    .script-tools {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .script-tools select {
+      width: 220px;
+      height: 36px;
+    }
+
+    .script-tools button {
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      padding: 0 11px;
+      cursor: pointer;
+    }
+
     .time-chip {
       display: inline-flex;
       align-items: center;
@@ -583,6 +605,16 @@
       height: 150px;
       width: 100%;
       display: block;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    .emotion-point {
+      cursor: grab;
+    }
+
+    .emotion-point:active {
+      cursor: grabbing;
     }
 
     .emotion-labels {
@@ -1222,24 +1254,29 @@
               <h2>脚本地图</h2>
               <span class="table-meta">时间线 · 主线 · 支线 · 情绪线</span>
             </div>
+            <div class="script-tools">
+              <select id="scriptSelect" aria-label="选择脚本地图"></select>
+              <button type="button" id="newScriptButton">新建脚本</button>
+              <button type="button" id="saveScriptButton">保存脚本</button>
+            </div>
           </div>
           <div class="script-shell">
             <div class="script-brief">
               <div class="brief-field">
                 <span>脚本标题</span>
-                <strong contenteditable="true">为什么认真发笔记，数据还是起不来？</strong>
+                <strong id="scriptTitle" contenteditable="true">为什么认真发笔记，数据还是起不来？</strong>
               </div>
               <div class="brief-field">
                 <span>一句话核心</span>
-                <div contenteditable="true">用一条真实复盘，把“内容努力”和“用户感受”之间的落差讲清楚。</div>
+                <div id="scriptCore" contenteditable="true">用一条真实复盘，把“内容努力”和“用户感受”之间的落差讲清楚。</div>
               </div>
               <div class="brief-field">
                 <span>目标观众</span>
-                <div contenteditable="true">正在做小红书但卡在选题、封面、开头的新手创作者。</div>
+                <div id="scriptAudience" contenteditable="true">正在做小红书但卡在选题、封面、开头的新手创作者。</div>
               </div>
               <div class="brief-field">
                 <span>结尾行动</span>
-                <div contenteditable="true">引导收藏脚本表，并留言自己的笔记数据问题。</div>
+                <div id="scriptAction" contenteditable="true">引导收藏脚本表，并留言自己的笔记数据问题。</div>
               </div>
             </div>
 
@@ -1256,7 +1293,7 @@
                       <th>情绪</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="scriptRows">
                     <tr>
                       <td><span class="time-chip" contenteditable="true">0-3s</span></td>
                       <td><div contenteditable="true">直接抛出反差：明明认真做了，为什么没人看？</div></td>
@@ -1420,13 +1457,15 @@
       status: "manual",
       message: "还没有导入数据。点击右上角导入 CSV 或 JSON。",
       daily: [],
-      notes: []
+      notes: [],
+      scriptMaps: []
     };
 
     let data = structuredClone(emptyData);
     let currentChart = "followers";
     let sortKey = "reads";
     let sortDir = "desc";
+    let currentScriptIndex = 0;
 
     const els = {
       range: document.querySelector("#rangeSelect"),
@@ -1451,10 +1490,69 @@
       importRows: document.querySelector("#importRows"),
       importText: document.querySelector("#importText"),
       importFormat: document.querySelector("#importFormat"),
-      importFile: document.querySelector("#importFile")
+      importFile: document.querySelector("#importFile"),
+      scriptSelect: document.querySelector("#scriptSelect"),
+      scriptTitle: document.querySelector("#scriptTitle"),
+      scriptCore: document.querySelector("#scriptCore"),
+      scriptAudience: document.querySelector("#scriptAudience"),
+      scriptAction: document.querySelector("#scriptAction"),
+      scriptRows: document.querySelector("#scriptRows"),
+      emotionCurve: document.querySelector("#emotionCurve"),
+      emotionLabels: document.querySelector("#emotionLabels"),
+      emotionEditor: document.querySelector("#emotionEditor")
     };
 
     const importColumns = ["date", "title", "type", "tag", "reads", "likes", "collects", "comments", "shares", "followers"];
+    const defaultScriptRows = [
+      {
+        time: "0-3s",
+        main: "直接抛出反差：明明认真做了，为什么没人看？",
+        branch: "点出账号真实困境：阅读低、收藏少、标题不被点开。",
+        shot: "后台数据快闪 + 皱眉看手机 + 笔记封面截图。",
+        line: "“我以为是内容不够努力，后来发现是开头没把人拉进来。”",
+        emotion: "好奇 / 共鸣"
+      },
+      {
+        time: "3-12s",
+        main: "展示问题：同样选题，为什么别人爆了，我没有？",
+        branch: "拆成三个变量：封面承诺、前 3 秒冲突、结尾收藏理由。",
+        shot: "左右对比图、标题圈点、手写标注。",
+        line: "“不是你没有观点，而是用户还没来得及相信你。”",
+        emotion: "紧张 / 想知道答案"
+      },
+      {
+        time: "12-28s",
+        main: "给出方法：把脚本拆成主线、支线和情绪线。",
+        branch: "主线讲故事，支线给证据，情绪线控制观众停留。",
+        shot: "脚本地图表格、彩色线条、关键词贴纸。",
+        line: "“你不是在写稿，你是在安排观众每 5 秒的感受。”",
+        emotion: "恍然 / 被点醒"
+      },
+      {
+        time: "28-45s",
+        main: "用自己的笔记做一轮复盘，说明下一条怎么改。",
+        branch: "连接数据面板：阅读、点赞、收藏分别对应不同问题。",
+        shot: "数据面板录屏 + 改前改后标题对比。",
+        line: "“阅读低先改入口，点赞低改观点，收藏低改清单价值。”",
+        emotion: "清晰 / 有掌控感"
+      },
+      {
+        time: "45-60s",
+        main: "收束：给观众一个可复制的脚本地图模板。",
+        branch: "提示收藏、评论关键词、下期拆一个真实案例。",
+        shot: "模板全屏展示 + 手指点到收藏按钮。",
+        line: "“下次别先写文案，先画这张地图。”",
+        emotion: "行动 / 想收藏"
+      }
+    ];
+    const defaultEmotionNodes = [
+      { label: "共鸣", value: 25 },
+      { label: "冲突", value: 82 },
+      { label: "解释", value: 38 },
+      { label: "恍然", value: 66 },
+      { label: "掌控", value: 48 },
+      { label: "行动", value: 90 }
+    ];
     const templateRows = [
       { date: "2026-05-10", title: "示例笔记标题", type: "图文", tag: "标签", reads: 12000, likes: 600, collects: 300, comments: 40, shares: 20, followers: 1500 },
       { date: "2026-05-11", title: "第二篇笔记", type: "视频", tag: "标签", reads: 24000, likes: 1200, collects: 680, comments: 90, shares: 50, followers: 1580 }
@@ -1753,8 +1851,28 @@
         ...emptyData,
         ...nextData,
         daily: Array.isArray(nextData.daily) ? nextData.daily : [],
-        notes: Array.isArray(nextData.notes) ? nextData.notes : []
+        notes: Array.isArray(nextData.notes) ? nextData.notes : [],
+        scriptMaps: Array.isArray(nextData.scriptMaps) && nextData.scriptMaps.length ? nextData.scriptMaps : [defaultScriptMap()]
       };
+    }
+
+    function defaultScriptMap(title = "为什么认真发笔记，数据还是起不来？") {
+      return {
+        id: `script-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        title,
+        core: "用一条真实复盘，把“内容努力”和“用户感受”之间的落差讲清楚。",
+        audience: "正在做小红书但卡在选题、封面、开头的新手创作者。",
+        action: "引导收藏脚本表，并留言自己的笔记数据问题。",
+        rows: structuredClone(defaultScriptRows),
+        emotions: structuredClone(defaultEmotionNodes)
+      };
+    }
+
+    function ensureScriptMaps() {
+      if (!Array.isArray(data.scriptMaps) || !data.scriptMaps.length) {
+        data.scriptMaps = [defaultScriptMap()];
+      }
+      currentScriptIndex = Math.min(Math.max(currentScriptIndex, 0), data.scriptMaps.length - 1);
     }
 
     async function loadDataFile() {
@@ -1771,7 +1889,10 @@
           data = structuredClone(emptyData);
         }
       }
+      ensureScriptMaps();
       render();
+      renderScriptSelector();
+      renderScriptMap(currentScriptIndex);
     }
 
     async function saveDataFile() {
@@ -1854,8 +1975,97 @@
         status: "manual",
         message: `已手动导入 ${notes.length} 条笔记`,
         daily,
-        notes
+        notes,
+        scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? data.scriptMaps : [defaultScriptMap()]
       });
+    }
+
+    function renderScriptSelector() {
+      ensureScriptMaps();
+      els.scriptSelect.innerHTML = data.scriptMaps.map((script, index) => `
+        <option value="${index}" ${index === currentScriptIndex ? "selected" : ""}>${escapeHtml(script.title || `脚本 ${index + 1}`)}</option>
+      `).join("");
+    }
+
+    function renderScriptRows(rows) {
+      const normalizedRows = Array.isArray(rows) && rows.length ? rows : structuredClone(defaultScriptRows);
+      els.scriptRows.innerHTML = normalizedRows.map(row => `
+        <tr>
+          <td><span class="time-chip" contenteditable="true" data-script-field="time">${escapeHtml(row.time || "")}</span></td>
+          <td><div contenteditable="true" data-script-field="main">${escapeHtml(row.main || "")}</div></td>
+          <td><div contenteditable="true" data-script-field="branch">${escapeHtml(row.branch || "")}</div></td>
+          <td><div contenteditable="true" data-script-field="shot">${escapeHtml(row.shot || "")}</div></td>
+          <td><div contenteditable="true" data-script-field="line">${escapeHtml(row.line || "")}</div></td>
+          <td><div contenteditable="true" data-script-field="emotion">${escapeHtml(row.emotion || "")}</div></td>
+        </tr>
+      `).join("");
+    }
+
+    function collectScriptRows() {
+      return [...els.scriptRows.querySelectorAll("tr")].map(row => ({
+        time: row.querySelector('[data-script-field="time"]')?.textContent.trim() || "",
+        main: row.querySelector('[data-script-field="main"]')?.textContent.trim() || "",
+        branch: row.querySelector('[data-script-field="branch"]')?.textContent.trim() || "",
+        shot: row.querySelector('[data-script-field="shot"]')?.textContent.trim() || "",
+        line: row.querySelector('[data-script-field="line"]')?.textContent.trim() || "",
+        emotion: row.querySelector('[data-script-field="emotion"]')?.textContent.trim() || ""
+      })).filter(row => Object.values(row).some(Boolean));
+    }
+
+    function renderEmotionEditor(emotions) {
+      const nodes = Array.isArray(emotions) && emotions.length ? emotions : structuredClone(defaultEmotionNodes);
+      els.emotionEditor.innerHTML = nodes.map(node => {
+        const label = node.label || "情绪";
+        const value = Math.max(0, Math.min(100, Number(node.value) || 0));
+        return `
+          <div class="emotion-node">
+            <div class="emotion-name" contenteditable="true">${escapeHtml(label)}</div>
+            <input type="range" min="0" max="100" value="${value}" aria-label="${escapeHtml(label)}强度">
+            <span class="emotion-value">${value}</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderScriptMap(index = 0) {
+      ensureScriptMaps();
+      currentScriptIndex = Math.min(Math.max(index, 0), data.scriptMaps.length - 1);
+      const script = data.scriptMaps[currentScriptIndex];
+      els.scriptTitle.textContent = script.title || `脚本 ${currentScriptIndex + 1}`;
+      els.scriptCore.textContent = script.core || "";
+      els.scriptAudience.textContent = script.audience || "";
+      els.scriptAction.textContent = script.action || "";
+      renderScriptRows(script.rows);
+      renderEmotionEditor(script.emotions);
+      renderEmotionCurve();
+    }
+
+    function collectCurrentScriptMap() {
+      const existing = data.scriptMaps[currentScriptIndex] || defaultScriptMap();
+      return {
+        ...existing,
+        title: els.scriptTitle.textContent.trim() || `脚本 ${currentScriptIndex + 1}`,
+        core: els.scriptCore.textContent.trim(),
+        audience: els.scriptAudience.textContent.trim(),
+        action: els.scriptAction.textContent.trim(),
+        rows: collectScriptRows(),
+        emotions: emotionNodes().map(node => ({ label: node.label, value: node.value }))
+      };
+    }
+
+    function storeCurrentScriptMap() {
+      ensureScriptMaps();
+      data.scriptMaps[currentScriptIndex] = collectCurrentScriptMap();
+    }
+
+    async function saveCurrentScriptMap() {
+      storeCurrentScriptMap();
+      const baseMessage = data.message || "脚本地图已更新";
+      data.message = "脚本地图已保存";
+      await saveDataFile();
+      data.message = baseMessage;
+      renderScriptSelector();
+      els.loadStatus.textContent = "脚本地图已保存";
     }
 
     function rowsToData(rows) {
@@ -1897,7 +2107,8 @@
         status: "manual",
         message: `已手动导入 ${notes.length} 条笔记`,
         daily,
-        notes
+        notes,
+        scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? data.scriptMaps : [defaultScriptMap()]
       });
     }
 
@@ -1991,11 +2202,14 @@
 
     async function applyImport() {
       try {
+        storeCurrentScriptMap();
         data = rowsToData(readImportRows());
         if (!data.notes.length && !data.daily.length) throw new Error("请至少填写一行数据");
         await saveDataFile();
         els.drawer.classList.remove("open");
         render();
+        renderScriptSelector();
+        renderScriptMap(currentScriptIndex);
       } catch (error) {
         alert(error.message);
       }
@@ -2022,8 +2236,8 @@
     }
 
     function renderEmotionCurve() {
-      const svg = document.querySelector("#emotionCurve");
-      const labels = document.querySelector("#emotionLabels");
+      const svg = els.emotionCurve;
+      const labels = els.emotionLabels;
       if (!svg || !labels) return;
       const nodes = emotionNodes();
       const width = 320;
@@ -2038,12 +2252,51 @@
       svg.innerHTML = `
         <path d="${path}" fill="none" stroke="#e7e0d4" stroke-width="10" stroke-linecap="round"/>
         <path d="${path}" fill="none" stroke="#e84855" stroke-width="4" stroke-linecap="round"/>
-        ${points.map((point, index) => `<circle cx="${point.x}" cy="${point.y}" r="5" fill="${index % 3 === 0 ? "#148f77" : index % 3 === 1 ? "#e84855" : "#c68a14"}"/>`).join("")}
+        ${points.map((point, index) => `<circle class="emotion-point" data-index="${index}" cx="${point.x}" cy="${point.y}" r="6" fill="${index % 3 === 0 ? "#148f77" : index % 3 === 1 ? "#e84855" : "#c68a14"}"/>`).join("")}
       `;
       labels.innerHTML = points.map(point => `<span>${escapeHtml(point.label)}</span>`).join("");
       nodes.forEach(node => {
         node.valueEl.textContent = node.value;
       });
+    }
+
+    function valueFromCurvePointer(event) {
+      const rect = els.emotionCurve.getBoundingClientRect();
+      const height = rect.height || 150;
+      const pad = 18;
+      const y = Math.max(pad, Math.min(height - pad, event.clientY - rect.top));
+      return Math.round((1 - (y - pad) / (height - pad * 2)) * 100);
+    }
+
+    function updateEmotionNodeValue(index, value) {
+      const input = els.emotionEditor.querySelectorAll('.emotion-node input[type="range"]')[index];
+      if (!input) return;
+      input.value = Math.max(0, Math.min(100, value));
+      renderEmotionCurve();
+    }
+
+    let draggingEmotionIndex = null;
+
+    function startEmotionDrag(event) {
+      const point = event.target.closest(".emotion-point");
+      if (!point) return;
+      draggingEmotionIndex = Number(point.dataset.index);
+      point.classList.add("active");
+      els.emotionCurve.setPointerCapture?.(event.pointerId);
+      updateEmotionNodeValue(draggingEmotionIndex, valueFromCurvePointer(event));
+    }
+
+    function moveEmotionDrag(event) {
+      if (draggingEmotionIndex === null) return;
+      event.preventDefault();
+      updateEmotionNodeValue(draggingEmotionIndex, valueFromCurvePointer(event));
+    }
+
+    function stopEmotionDrag(event) {
+      if (draggingEmotionIndex === null) return;
+      els.emotionCurve.querySelector(".emotion-point.active")?.classList.remove("active");
+      els.emotionCurve.releasePointerCapture?.(event.pointerId);
+      draggingEmotionIndex = null;
     }
 
     document.querySelectorAll("[data-chart]").forEach(button => {
@@ -2089,8 +2342,27 @@
       });
     });
 
-    document.querySelector("#emotionEditor").addEventListener("input", renderEmotionCurve);
-    document.querySelector("#emotionEditor").addEventListener("keyup", renderEmotionCurve);
+    els.emotionEditor.addEventListener("input", renderEmotionCurve);
+    els.emotionEditor.addEventListener("keyup", renderEmotionCurve);
+    els.emotionCurve.addEventListener("pointerdown", startEmotionDrag);
+    els.emotionCurve.addEventListener("pointermove", moveEmotionDrag);
+    els.emotionCurve.addEventListener("pointerup", stopEmotionDrag);
+    els.emotionCurve.addEventListener("pointercancel", stopEmotionDrag);
+    els.scriptSelect.addEventListener("change", () => {
+      storeCurrentScriptMap();
+      currentScriptIndex = Number(els.scriptSelect.value) || 0;
+      renderScriptMap(currentScriptIndex);
+      renderScriptSelector();
+    });
+    document.querySelector("#newScriptButton").addEventListener("click", () => {
+      storeCurrentScriptMap();
+      data.scriptMaps.push(defaultScriptMap(`新脚本 ${data.scriptMaps.length + 1}`));
+      currentScriptIndex = data.scriptMaps.length - 1;
+      renderScriptSelector();
+      renderScriptMap(currentScriptIndex);
+      els.loadStatus.textContent = "已新建脚本，编辑后点击保存脚本";
+    });
+    document.querySelector("#saveScriptButton").addEventListener("click", saveCurrentScriptMap);
 
     [els.range, els.type, els.metric, els.search].forEach(el => {
       el.addEventListener("input", render);
