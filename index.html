@@ -470,6 +470,145 @@
       font-size: 12px;
     }
 
+    .script-map {
+      margin-top: 14px;
+    }
+
+    .script-shell {
+      padding: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .script-brief {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .brief-field {
+      min-height: 76px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .brief-field span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .brief-field strong,
+    .brief-field div {
+      outline: none;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .script-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .script-table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+    }
+
+    .script-table {
+      min-width: 980px;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .script-table th {
+      background: #fff7ea;
+      cursor: default;
+    }
+
+    .script-table td,
+    .script-table th {
+      vertical-align: top;
+      white-space: normal;
+    }
+
+    .script-table [contenteditable="true"] {
+      min-height: 36px;
+      outline: none;
+      line-height: 1.55;
+    }
+
+    .time-chip {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      border-radius: 999px;
+      padding: 0 9px;
+      background: #eef7f4;
+      color: var(--green);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .script-side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .emotion-card,
+    .template-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      padding: 14px;
+    }
+
+    .emotion-card h3,
+    .template-card h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+    }
+
+    .emotion-curve {
+      height: 150px;
+      width: 100%;
+      display: block;
+    }
+
+    .emotion-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .beat-list {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .beat-list div {
+      padding: 9px 10px;
+      border-radius: 8px;
+      background: #fff7ea;
+      outline: none;
+    }
+
     .table-tools {
       display: flex;
       align-items: center;
@@ -729,7 +868,12 @@
 
       .kpis,
       .grid,
-      .workspace {
+      .workspace,
+      .script-layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .script-brief {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
@@ -760,6 +904,8 @@
       .workspace,
       .idea-grid,
       .plan-row,
+      .script-layout,
+      .script-brief,
       .nav {
         grid-template-columns: 1fr;
       }
@@ -809,6 +955,10 @@
         <button type="button" data-view="ideas">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.74V16h8v-1.26A7 7 0 0 0 12 2Z"/></svg>
           灵感
+        </button>
+        <button type="button" data-view="script">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/><path d="M8 3v18"/><path d="M16 3v18"/></svg>
+          脚本地图
         </button>
       </nav>
 
@@ -1023,6 +1173,129 @@
                 <div class="idea-meta" contenteditable="true">角度：阅读、完播、收藏理由、下次优化</div>
               </div>
               <span class="idea-tag">数据</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="script-map">
+        <article class="panel" id="scriptSection">
+          <div class="panel-head">
+            <div>
+              <h2>脚本地图</h2>
+              <span class="table-meta">时间线 · 主线 · 支线 · 情绪线</span>
+            </div>
+          </div>
+          <div class="script-shell">
+            <div class="script-brief">
+              <div class="brief-field">
+                <span>脚本标题</span>
+                <strong contenteditable="true">为什么认真发笔记，数据还是起不来？</strong>
+              </div>
+              <div class="brief-field">
+                <span>一句话核心</span>
+                <div contenteditable="true">用一条真实复盘，把“内容努力”和“用户感受”之间的落差讲清楚。</div>
+              </div>
+              <div class="brief-field">
+                <span>目标观众</span>
+                <div contenteditable="true">正在做小红书但卡在选题、封面、开头的新手创作者。</div>
+              </div>
+              <div class="brief-field">
+                <span>结尾行动</span>
+                <div contenteditable="true">引导收藏脚本表，并留言自己的笔记数据问题。</div>
+              </div>
+            </div>
+
+            <div class="script-layout">
+              <div class="script-table-wrap">
+                <table class="script-table">
+                  <thead>
+                    <tr>
+                      <th>时间段</th>
+                      <th>主线内容</th>
+                      <th>支线信息</th>
+                      <th>镜头/素材</th>
+                      <th>旁白/台词</th>
+                      <th>情绪</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="time-chip" contenteditable="true">0-3s</span></td>
+                      <td><div contenteditable="true">直接抛出反差：明明认真做了，为什么没人看？</div></td>
+                      <td><div contenteditable="true">点出账号真实困境：阅读低、收藏少、标题不被点开。</div></td>
+                      <td><div contenteditable="true">后台数据快闪 + 皱眉看手机 + 笔记封面截图。</div></td>
+                      <td><div contenteditable="true">“我以为是内容不够努力，后来发现是开头没把人拉进来。”</div></td>
+                      <td><div contenteditable="true">好奇 / 共鸣</div></td>
+                    </tr>
+                    <tr>
+                      <td><span class="time-chip" contenteditable="true">3-12s</span></td>
+                      <td><div contenteditable="true">展示问题：同样选题，为什么别人爆了，我没有？</div></td>
+                      <td><div contenteditable="true">拆成三个变量：封面承诺、前 3 秒冲突、结尾收藏理由。</div></td>
+                      <td><div contenteditable="true">左右对比图、标题圈点、手写标注。</div></td>
+                      <td><div contenteditable="true">“不是你没有观点，而是用户还没来得及相信你。”</div></td>
+                      <td><div contenteditable="true">紧张 / 想知道答案</div></td>
+                    </tr>
+                    <tr>
+                      <td><span class="time-chip" contenteditable="true">12-28s</span></td>
+                      <td><div contenteditable="true">给出方法：把脚本拆成主线、支线和情绪线。</div></td>
+                      <td><div contenteditable="true">主线讲故事，支线给证据，情绪线控制观众停留。</div></td>
+                      <td><div contenteditable="true">脚本地图表格、彩色线条、关键词贴纸。</div></td>
+                      <td><div contenteditable="true">“你不是在写稿，你是在安排观众每 5 秒的感受。”</div></td>
+                      <td><div contenteditable="true">恍然 / 被点醒</div></td>
+                    </tr>
+                    <tr>
+                      <td><span class="time-chip" contenteditable="true">28-45s</span></td>
+                      <td><div contenteditable="true">用自己的笔记做一轮复盘，说明下一条怎么改。</div></td>
+                      <td><div contenteditable="true">连接数据面板：阅读、点赞、收藏分别对应不同问题。</div></td>
+                      <td><div contenteditable="true">数据面板录屏 + 改前改后标题对比。</div></td>
+                      <td><div contenteditable="true">“阅读低先改入口，点赞低改观点，收藏低改清单价值。”</div></td>
+                      <td><div contenteditable="true">清晰 / 有掌控感</div></td>
+                    </tr>
+                    <tr>
+                      <td><span class="time-chip" contenteditable="true">45-60s</span></td>
+                      <td><div contenteditable="true">收束：给观众一个可复制的脚本地图模板。</div></td>
+                      <td><div contenteditable="true">提示收藏、评论关键词、下期拆一个真实案例。</div></td>
+                      <td><div contenteditable="true">模板全屏展示 + 手指点到收藏按钮。</div></td>
+                      <td><div contenteditable="true">“下次别先写文案，先画这张地图。”</div></td>
+                      <td><div contenteditable="true">行动 / 想收藏</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <aside class="script-side">
+                <div class="emotion-card">
+                  <h3>情绪曲线</h3>
+                  <svg class="emotion-curve" viewBox="0 0 320 150" role="img" aria-label="情绪曲线">
+                    <path d="M18 116 C46 112 54 42 82 48 C104 52 94 116 122 110 C150 104 152 70 178 66 C210 62 212 98 238 92 C270 86 276 48 304 36" fill="none" stroke="#e7e0d4" stroke-width="10" stroke-linecap="round"/>
+                    <path d="M18 116 C46 112 54 42 82 48 C104 52 94 116 122 110 C150 104 152 70 178 66 C210 62 212 98 238 92 C270 86 276 48 304 36" fill="none" stroke="#e84855" stroke-width="4" stroke-linecap="round"/>
+                    <circle cx="18" cy="116" r="5" fill="#148f77"/>
+                    <circle cx="82" cy="48" r="5" fill="#e84855"/>
+                    <circle cx="122" cy="110" r="5" fill="#c68a14"/>
+                    <circle cx="178" cy="66" r="5" fill="#2f6fbe"/>
+                    <circle cx="238" cy="92" r="5" fill="#148f77"/>
+                    <circle cx="304" cy="36" r="5" fill="#e84855"/>
+                  </svg>
+                  <div class="emotion-labels">
+                    <span>共鸣</span>
+                    <span>冲突</span>
+                    <span>解释</span>
+                    <span>行动</span>
+                  </div>
+                </div>
+
+                <div class="template-card">
+                  <h3>结构模板</h3>
+                  <div class="beat-list">
+                    <div contenteditable="true">1. 先抛出用户正在经历的矛盾。</div>
+                    <div contenteditable="true">2. 给一个反常识判断，而不是马上教学。</div>
+                    <div contenteditable="true">3. 用数据、画面或案例证明判断。</div>
+                    <div contenteditable="true">4. 收束成一个可收藏的方法。</div>
+                    <div contenteditable="true">5. 结尾留下下一条内容的钩子。</div>
+                  </div>
+                </div>
+              </aside>
             </div>
           </div>
         </article>
@@ -1708,7 +1981,8 @@
           growth: ".grid",
           notes: ".lower",
           shooting: "#shootingSection",
-          ideas: "#ideasSection"
+          ideas: "#ideasSection",
+          script: "#scriptSection"
         };
         const target = targets[button.dataset.view] || ".topbar";
         document.querySelector(target).scrollIntoView({ behavior: "smooth", block: "start" });
