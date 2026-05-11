@@ -594,6 +594,43 @@
       margin-top: 8px;
     }
 
+    .emotion-editor {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .emotion-node {
+      display: grid;
+      grid-template-columns: 76px 1fr 36px;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .emotion-name {
+      min-height: 28px;
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 8px;
+      outline: none;
+      background: #fffdf8;
+    }
+
+    .emotion-node input[type="range"] {
+      height: 28px;
+      padding: 0;
+      accent-color: var(--red);
+    }
+
+    .emotion-value {
+      color: var(--muted);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
     .beat-list {
       display: grid;
       gap: 8px;
@@ -1267,21 +1304,39 @@
               <aside class="script-side">
                 <div class="emotion-card">
                   <h3>情绪曲线</h3>
-                  <svg class="emotion-curve" viewBox="0 0 320 150" role="img" aria-label="情绪曲线">
-                    <path d="M18 116 C46 112 54 42 82 48 C104 52 94 116 122 110 C150 104 152 70 178 66 C210 62 212 98 238 92 C270 86 276 48 304 36" fill="none" stroke="#e7e0d4" stroke-width="10" stroke-linecap="round"/>
-                    <path d="M18 116 C46 112 54 42 82 48 C104 52 94 116 122 110 C150 104 152 70 178 66 C210 62 212 98 238 92 C270 86 276 48 304 36" fill="none" stroke="#e84855" stroke-width="4" stroke-linecap="round"/>
-                    <circle cx="18" cy="116" r="5" fill="#148f77"/>
-                    <circle cx="82" cy="48" r="5" fill="#e84855"/>
-                    <circle cx="122" cy="110" r="5" fill="#c68a14"/>
-                    <circle cx="178" cy="66" r="5" fill="#2f6fbe"/>
-                    <circle cx="238" cy="92" r="5" fill="#148f77"/>
-                    <circle cx="304" cy="36" r="5" fill="#e84855"/>
-                  </svg>
-                  <div class="emotion-labels">
-                    <span>共鸣</span>
-                    <span>冲突</span>
-                    <span>解释</span>
-                    <span>行动</span>
+                  <svg class="emotion-curve" id="emotionCurve" viewBox="0 0 320 150" role="img" aria-label="情绪曲线"></svg>
+                  <div class="emotion-labels" id="emotionLabels"></div>
+                  <div class="emotion-editor" id="emotionEditor">
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">共鸣</div>
+                      <input type="range" min="0" max="100" value="25" aria-label="共鸣强度">
+                      <span class="emotion-value">25</span>
+                    </div>
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">冲突</div>
+                      <input type="range" min="0" max="100" value="82" aria-label="冲突强度">
+                      <span class="emotion-value">82</span>
+                    </div>
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">解释</div>
+                      <input type="range" min="0" max="100" value="38" aria-label="解释强度">
+                      <span class="emotion-value">38</span>
+                    </div>
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">恍然</div>
+                      <input type="range" min="0" max="100" value="66" aria-label="恍然强度">
+                      <span class="emotion-value">66</span>
+                    </div>
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">掌控</div>
+                      <input type="range" min="0" max="100" value="48" aria-label="掌控强度">
+                      <span class="emotion-value">48</span>
+                    </div>
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">行动</div>
+                      <input type="range" min="0" max="100" value="90" aria-label="行动强度">
+                      <span class="emotion-value">90</span>
+                    </div>
                   </div>
                 </div>
 
@@ -1946,6 +2001,51 @@
       }
     }
 
+    function emotionNodes() {
+      return [...document.querySelectorAll("#emotionEditor .emotion-node")].map(node => ({
+        label: node.querySelector(".emotion-name").textContent.trim() || "情绪",
+        value: Number(node.querySelector("input").value || 0),
+        valueEl: node.querySelector(".emotion-value")
+      }));
+    }
+
+    function emotionPath(points) {
+      if (!points.length) return "";
+      const commands = [`M${points[0].x} ${points[0].y}`];
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const point = points[i];
+        const midX = (prev.x + point.x) / 2;
+        commands.push(`C${midX} ${prev.y} ${midX} ${point.y} ${point.x} ${point.y}`);
+      }
+      return commands.join(" ");
+    }
+
+    function renderEmotionCurve() {
+      const svg = document.querySelector("#emotionCurve");
+      const labels = document.querySelector("#emotionLabels");
+      if (!svg || !labels) return;
+      const nodes = emotionNodes();
+      const width = 320;
+      const height = 150;
+      const pad = 18;
+      const points = nodes.map((node, index) => ({
+        x: pad + index * ((width - pad * 2) / Math.max(1, nodes.length - 1)),
+        y: height - pad - node.value / 100 * (height - pad * 2),
+        ...node
+      }));
+      const path = emotionPath(points);
+      svg.innerHTML = `
+        <path d="${path}" fill="none" stroke="#e7e0d4" stroke-width="10" stroke-linecap="round"/>
+        <path d="${path}" fill="none" stroke="#e84855" stroke-width="4" stroke-linecap="round"/>
+        ${points.map((point, index) => `<circle cx="${point.x}" cy="${point.y}" r="5" fill="${index % 3 === 0 ? "#148f77" : index % 3 === 1 ? "#e84855" : "#c68a14"}"/>`).join("")}
+      `;
+      labels.innerHTML = points.map(point => `<span>${escapeHtml(point.label)}</span>`).join("");
+      nodes.forEach(node => {
+        node.valueEl.textContent = node.value;
+      });
+    }
+
     document.querySelectorAll("[data-chart]").forEach(button => {
       button.addEventListener("click", () => {
         currentChart = button.dataset.chart;
@@ -1988,6 +2088,9 @@
         document.querySelector(target).scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
+
+    document.querySelector("#emotionEditor").addEventListener("input", renderEmotionCurve);
+    document.querySelector("#emotionEditor").addEventListener("keyup", renderEmotionCurve);
 
     [els.range, els.type, els.metric, els.search].forEach(el => {
       el.addEventListener("input", render);
@@ -2042,6 +2145,7 @@
     window.addEventListener("resize", drawChart);
 
     loadDataFile();
+    renderEmotionCurve();
   </script>
 </body>
 </html>
