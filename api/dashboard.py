@@ -10,11 +10,11 @@ KEY = "qizai-dashboard"
 
 def default_data():
     return {
-        "account": "小红书主页",
+        "account": "奇仔旅行内容工作台",
         "sourceUrl": "",
         "updatedAt": "",
         "status": "manual",
-        "message": "还没有导入数据。点击右上角导入 CSV 或 JSON。",
+        "message": "还没有导入旅行笔记数据。点击右上角导入 CSV 或 JSON。",
         "daily": [],
         "notes": [],
     }

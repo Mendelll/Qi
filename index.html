@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>奇仔的数据面板</title>
+  <title>奇仔的旅行内容工作台</title>
   <style>
     :root {
       color-scheme: light;
@@ -369,6 +369,78 @@
       margin-top: 8px;
       color: var(--yellow);
       font-size: 13px;
+    }
+
+
+
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr .9fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .strategy-card {
+      padding: 16px 18px 18px;
+      min-height: 178px;
+    }
+
+    .strategy-card h2 {
+      margin-bottom: 12px;
+    }
+
+    .insight-list,
+    .destination-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .insight-item,
+    .destination-item {
+      display: grid;
+      gap: 5px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .insight-item:last-child,
+    .destination-item:last-child {
+      border-bottom: 0;
+    }
+
+    .insight-title,
+    .destination-title {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .insight-meta,
+    .destination-meta {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .next-action {
+      min-height: 110px;
+      display: grid;
+      align-content: center;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+    }
+
+    .next-action strong {
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .next-action span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
     }
 
     .lower {
@@ -936,6 +1008,7 @@
       }
 
       .kpis,
+      .strategy-grid,
       .grid,
       .workspace,
       .script-layout {
@@ -969,6 +1042,7 @@
 
       .filters,
       .kpis,
+      .strategy-grid,
       .grid,
       .workspace,
       .idea-grid,
@@ -999,8 +1073,8 @@
       <div class="brand">
         <div class="brand-mark">奇</div>
         <div>
-          <strong>奇仔的数据面板</strong>
-          <span>小红书运营工作台</span>
+          <strong>奇仔的旅行内容工作台</strong>
+          <span>小红书旅行创作中枢</span>
         </div>
       </div>
 
@@ -1063,9 +1137,9 @@
     <main>
       <div class="topbar">
         <div>
-          <h1>奇仔的数据面板</h1>
-          <p class="subtitle" id="periodText">等待手动导入数据</p>
-          <p class="load-status" id="loadStatus">点击右上角导入 CSV 或 JSON</p>
+          <h1>奇仔的旅行内容工作台</h1>
+          <p class="subtitle" id="periodText">把笔记数据、目的地线索和脚本节奏放在同一张桌面上</p>
+          <p class="load-status" id="loadStatus">导入 CSV / JSON 后，系统会按目的地和内容价值自动给出下一步建议</p>
         </div>
         <div class="actions">
           <button class="tool-button" type="button" id="importButton" title="手动导入数据">
@@ -1089,31 +1163,46 @@
         </article>
         <article class="kpi">
           <div>
-            <div class="kpi-title">总阅读</div>
+            <div class="kpi-title">旅行内容触达</div>
             <div class="kpi-value" id="readsValue">0</div>
           </div>
           <div class="delta" id="readsDelta">+0%</div>
         </article>
         <article class="kpi">
           <div>
-            <div class="kpi-title">互动率</div>
+            <div class="kpi-title">收藏转化</div>
             <div class="kpi-value" id="engageValue">0%</div>
           </div>
           <div class="delta" id="engageDelta">+0%</div>
         </article>
         <article class="kpi">
           <div>
-            <div class="kpi-title">发布笔记</div>
+            <div class="kpi-title">已发布路线</div>
             <div class="kpi-value" id="notesValue">0</div>
           </div>
           <div class="delta" id="notesDelta">本周期发布</div>
         </article>
       </section>
 
+      <section class="strategy-grid" aria-label="旅行内容策略">
+        <article class="panel strategy-card">
+          <h2>内容机会</h2>
+          <div class="insight-list" id="contentCompass"></div>
+        </article>
+        <article class="panel strategy-card">
+          <h2>目的地表现</h2>
+          <div class="destination-list" id="destinationList"></div>
+        </article>
+        <article class="panel strategy-card">
+          <h2>下一条建议</h2>
+          <div class="next-action" id="nextAction"></div>
+        </article>
+      </section>
+
       <section class="grid">
         <article class="panel">
           <div class="panel-head">
-            <h2>涨粉与阅读趋势</h2>
+            <h2>旅行内容增长趋势</h2>
             <div class="seg" role="tablist" aria-label="趋势指标">
               <button class="active" type="button" data-chart="followers">涨粉</button>
               <button type="button" data-chart="reads">阅读</button>
@@ -1127,7 +1216,7 @@
 
         <article class="panel">
           <div class="panel-head">
-            <h2>爆款笔记排行</h2>
+            <h2>高潜力旅行笔记</h2>
             <span class="table-meta" id="rankMetric">按阅读量</span>
           </div>
           <div class="side-list" id="rankList"></div>
@@ -1138,11 +1227,11 @@
         <article class="panel">
           <div class="panel-head">
             <div>
-              <h2>单篇笔记数据</h2>
+              <h2>旅行笔记表现</h2>
               <span class="table-meta" id="tableMeta">0 条笔记</span>
             </div>
             <div class="table-tools">
-              <input class="search" id="searchInput" type="search" placeholder="搜索标题或标签">
+              <input class="search" id="searchInput" type="search" placeholder="搜索目的地 / 标题 / 标签">
               <div class="seg" aria-label="表格指标">
                 <button class="active" type="button" data-sort="reads">阅读</button>
                 <button type="button" data-sort="likes">点赞</button>
@@ -1175,32 +1264,32 @@
         <article class="panel" id="shootingSection">
           <div class="panel-head">
             <div>
-              <h2>拍摄计划</h2>
-              <span class="table-meta">近期内容排期</span>
+              <h2>旅程拍摄计划</h2>
+              <span class="table-meta">按城市、机位和补拍素材排期</span>
             </div>
           </div>
           <div class="plan-board">
             <div class="plan-row">
               <div class="plan-date" contenteditable="true">05/12</div>
               <div>
-                <div class="plan-title" contenteditable="true">通勤包开箱：3 个场景补拍</div>
-                <div class="plan-meta" contenteditable="true">镜头：桌面俯拍、出门前、地铁口封面</div>
+                <div class="plan-title" contenteditable="true">洛杉矶城市漫游：格里菲斯日落补拍</div>
+                <div class="plan-meta" contenteditable="true">镜头：远景天文台、城市灯光、La La Land 同款机位</div>
               </div>
               <span class="status-pill warm">待拍摄</span>
             </div>
             <div class="plan-row">
               <div class="plan-date" contenteditable="true">05/14</div>
               <div>
-                <div class="plan-title" contenteditable="true">小户型收纳复盘</div>
-                <div class="plan-meta" contenteditable="true">素材：前后对比、预算清单、避坑点</div>
+                <div class="plan-title" contenteditable="true">贵州洋芋国：街头小吃人物线</div>
+                <div class="plan-meta" contenteditable="true">素材：摊主采访、价格特写、第一口反应、方言声音</div>
               </div>
               <span class="status-pill">剪辑中</span>
             </div>
             <div class="plan-row">
               <div class="plan-date" contenteditable="true">05/17</div>
               <div>
-                <div class="plan-title" contenteditable="true">周末一人食菜单</div>
-                <div class="plan-meta" contenteditable="true">脚本：开头 3 秒钩子 + 成品近景</div>
+                <div class="plan-title" contenteditable="true">越南法餐：高性价比路线</div>
+                <div class="plan-meta" contenteditable="true">脚本：价格反差、菜单翻页、餐厅环境和结账镜头</div>
               </div>
               <span class="status-pill warm">待脚本</span>
             </div>
@@ -1210,36 +1299,36 @@
         <article class="panel" id="ideasSection">
           <div class="panel-head">
             <div>
-              <h2>灵感</h2>
-              <span class="table-meta">选题和标题池</span>
+              <h2>目的地灵感池</h2>
+              <span class="table-meta">选题、开场和当地故事</span>
             </div>
           </div>
           <div class="idea-grid">
             <div class="idea-card">
               <div>
-                <div class="idea-title" contenteditable="true">把爆款笔记拆成 5 个封面模板</div>
-                <div class="idea-meta" contenteditable="true">角度：标题结构、首图构图、评论区追问</div>
+                <div class="idea-title" contenteditable="true">世界上最孤独的城市，真的孤独吗？</div>
+                <div class="idea-meta" contenteditable="true">珀斯：海边、公路、城市空镜和独处情绪</div>
               </div>
               <span class="idea-tag">复盘</span>
             </div>
             <div class="idea-card">
               <div>
-                <div class="idea-title" contenteditable="true">普通女生低成本变精致的一周实验</div>
-                <div class="idea-meta" contenteditable="true">角度：预算、前后变化、真实执行难度</div>
+                <div class="idea-title" contenteditable="true">在洛杉矶寻找《爱乐之城》的现实版本</div>
+                <div class="idea-meta" contenteditable="true">格里菲斯天文台、日落、城市灯海、电影感旁白</div>
               </div>
               <span class="idea-tag">系列</span>
             </div>
             <div class="idea-card">
               <div>
-                <div class="idea-title" contenteditable="true">评论区高频问题做成答疑合集</div>
-                <div class="idea-meta" contenteditable="true">角度：截图问题、逐条回应、可收藏清单</div>
+                <div class="idea-title" contenteditable="true">越南为什么有这么多好吃的法餐？</div>
+                <div class="idea-meta" contenteditable="true">殖民历史、价格对比、餐厅地图、点单建议</div>
               </div>
               <span class="idea-tag">互动</span>
             </div>
             <div class="idea-card">
               <div>
-                <div class="idea-title" contenteditable="true">同一选题图文和视频的数据对比</div>
-                <div class="idea-meta" contenteditable="true">角度：阅读、完播、收藏理由、下次优化</div>
+                <div class="idea-title" contenteditable="true">冰岛不是远方，是一场白日梦练习</div>
+                <div class="idea-meta" contenteditable="true">电影联想、公路空镜、风声、一个人的旅行旁白</div>
               </div>
               <span class="idea-tag">数据</span>
             </div>
@@ -1251,8 +1340,8 @@
         <article class="panel" id="scriptSection">
           <div class="panel-head">
             <div>
-              <h2>脚本地图</h2>
-              <span class="table-meta">时间线 · 主线 · 支线 · 情绪线</span>
+              <h2>旅行脚本地图</h2>
+              <span class="table-meta">开场钩子 · 地点故事 · 镜头 · 情绪线</span>
             </div>
             <div class="script-tools">
               <select id="scriptSelect" aria-label="选择脚本地图"></select>
@@ -1264,19 +1353,19 @@
             <div class="script-brief">
               <div class="brief-field">
                 <span>脚本标题</span>
-                <strong id="scriptTitle" contenteditable="true">为什么认真发笔记，数据还是起不来？</strong>
+                <strong id="scriptTitle" contenteditable="true">珀斯为什么被叫作世界上最孤独的城市？</strong>
               </div>
               <div class="brief-field">
                 <span>一句话核心</span>
-                <div id="scriptCore" contenteditable="true">用一条真实复盘，把“内容努力”和“用户感受”之间的落差讲清楚。</div>
+                <div id="scriptCore" contenteditable="true">用城市漫游和个人感受，把“孤独”从标签拍成一条有温度的旅行故事。</div>
               </div>
               <div class="brief-field">
                 <span>目标观众</span>
-                <div id="scriptAudience" contenteditable="true">正在做小红书但卡在选题、封面、开头的新手创作者。</div>
+                <div id="scriptAudience" contenteditable="true">喜欢城市漫游、电影感旅行和独处体验的年轻旅行用户。</div>
               </div>
               <div class="brief-field">
                 <span>结尾行动</span>
-                <div id="scriptAction" contenteditable="true">引导收藏脚本表，并留言自己的笔记数据问题。</div>
+                <div id="scriptAction" contenteditable="true">引导收藏珀斯路线，并评论想看的下一座“被误解的城市”。</div>
               </div>
             </div>
 
@@ -1286,10 +1375,10 @@
                   <thead>
                     <tr>
                       <th>时间段</th>
-                      <th>主线内容</th>
-                      <th>支线信息</th>
-                      <th>镜头/素材</th>
-                      <th>旁白/台词</th>
+                      <th>地点主线</th>
+                      <th>当地故事 / 信息点</th>
+                      <th>镜头 / 声音素材</th>
+                      <th>旁白 / 字幕</th>
                       <th>情绪</th>
                     </tr>
                   </thead>
@@ -1378,13 +1467,13 @@
                 </div>
 
                 <div class="template-card">
-                  <h3>结构模板</h3>
+                  <h3>旅行叙事模板</h3>
                   <div class="beat-list">
-                    <div contenteditable="true">1. 先抛出用户正在经历的矛盾。</div>
-                    <div contenteditable="true">2. 给一个反常识判断，而不是马上教学。</div>
-                    <div contenteditable="true">3. 用数据、画面或案例证明判断。</div>
-                    <div contenteditable="true">4. 收束成一个可收藏的方法。</div>
-                    <div contenteditable="true">5. 结尾留下下一条内容的钩子。</div>
+                    <div contenteditable="true">1. 先抛出一个目的地反差或误解。</div>
+                    <div contenteditable="true">2. 用第一人称体验进入，而不是马上做攻略。</div>
+                    <div contenteditable="true">3. 用价格、路线、历史或人物补足可信度。</div>
+                    <div contenteditable="true">4. 收束成一条可复制的路线或机位清单。</div>
+                    <div contenteditable="true">5. 结尾留下下一座城市或下一段故事的钩子。</div>
                   </div>
                 </div>
               </aside>
@@ -1396,8 +1485,8 @@
   </div>
 
   <div class="drawer" id="importDrawer">
-    <h3>手动导入数据</h3>
-    <p>在表格里直接填写或修改数据。每一行是一条笔记，粉丝数填当天账号总粉丝即可。</p>
+    <h3>导入旅行笔记数据</h3>
+    <p>每一行是一条旅行笔记。标签建议填目的地或内容栏目，例如 洛杉矶、贵州、越南、电影感、当地人故事。</p>
     <div class="import-grid">
       <label>
         <span>辅助导入格式</span>
@@ -1451,11 +1540,11 @@
 
   <script>
     const emptyData = {
-      account: "小红书主页",
+      account: "奇仔旅行内容工作台",
       sourceUrl: "",
       updatedAt: "",
       status: "manual",
-      message: "还没有导入数据。点击右上角导入 CSV 或 JSON。",
+      message: "还没有导入旅行笔记数据。点击右上角导入 CSV 或 JSON。",
       daily: [],
       notes: [],
       scriptMaps: []
@@ -1480,6 +1569,9 @@
       engageValue: document.querySelector("#engageValue"),
       engageDelta: document.querySelector("#engageDelta"),
       notesValue: document.querySelector("#notesValue"),
+      contentCompass: document.querySelector("#contentCompass"),
+      destinationList: document.querySelector("#destinationList"),
+      nextAction: document.querySelector("#nextAction"),
       rankList: document.querySelector("#rankList"),
       rankMetric: document.querySelector("#rankMetric"),
       notesBody: document.querySelector("#notesBody"),
@@ -1506,42 +1598,42 @@
     const defaultScriptRows = [
       {
         time: "0-3s",
-        main: "直接抛出反差：明明认真做了，为什么没人看？",
-        branch: "点出账号真实困境：阅读低、收藏少、标题不被点开。",
-        shot: "后台数据快闪 + 皱眉看手机 + 笔记封面截图。",
-        line: "“我以为是内容不够努力，后来发现是开头没把人拉进来。”",
-        emotion: "好奇 / 共鸣"
+        main: "直接抛出反差：大家都说珀斯孤独，但我在这里反而松了一口气。",
+        branch: "点出城市标签：偏远、人口少、离其他大城市远。",
+        shot: "海边空镜 + 街道慢走 + 地图拉远到澳洲西海岸。",
+        line: "“它不是无聊，是终于没有人催你快一点。”",
+        emotion: "好奇 / 松弛"
       },
       {
         time: "3-12s",
-        main: "展示问题：同样选题，为什么别人爆了，我没有？",
-        branch: "拆成三个变量：封面承诺、前 3 秒冲突、结尾收藏理由。",
-        shot: "左右对比图、标题圈点、手写标注。",
-        line: "“不是你没有观点，而是用户还没来得及相信你。”",
-        emotion: "紧张 / 想知道答案"
+        main: "展开城市漫游：从海边、公路、咖啡店到傍晚城市灯光。",
+        branch: "补充交通、停留天数、适合谁来。",
+        shot: "脚步声、车窗、咖啡杯、海浪、黄昏延时。",
+        line: "“如果你想把旅行过成暂停键，珀斯很适合。”",
+        emotion: "代入 / 想出发"
       },
       {
         time: "12-28s",
-        main: "给出方法：把脚本拆成主线、支线和情绪线。",
-        branch: "主线讲故事，支线给证据，情绪线控制观众停留。",
-        shot: "脚本地图表格、彩色线条、关键词贴纸。",
-        line: "“你不是在写稿，你是在安排观众每 5 秒的感受。”",
-        emotion: "恍然 / 被点醒"
+        main: "给出可复制路线：上午海边，下午城市，傍晚看日落。",
+        branch: "讲清预算、交通和拍照机位。",
+        shot: "地图截图、路线箭头、机位示意、价格小票。",
+        line: "“这条路线不用赶景点，适合把一天慢慢过完。”",
+        emotion: "清晰 / 可收藏"
       },
       {
         time: "28-45s",
-        main: "用自己的笔记做一轮复盘，说明下一条怎么改。",
-        branch: "连接数据面板：阅读、点赞、收藏分别对应不同问题。",
-        shot: "数据面板录屏 + 改前改后标题对比。",
-        line: "“阅读低先改入口，点赞低改观点，收藏低改清单价值。”",
-        emotion: "清晰 / 有掌控感"
+        main: "插入当地故事：淘金小镇、移民、海边生活节奏。",
+        branch: "让目的地从攻略变成有记忆点的人和历史。",
+        shot: "老照片、街边招牌、当地人一句话采访。",
+        line: "“城市不是景点集合，它有自己的性格。”",
+        emotion: "理解 / 有厚度"
       },
       {
         time: "45-60s",
-        main: "收束：给观众一个可复制的脚本地图模板。",
-        branch: "提示收藏、评论关键词、下期拆一个真实案例。",
-        shot: "模板全屏展示 + 手指点到收藏按钮。",
-        line: "“下次别先写文案，先画这张地图。”",
+        main: "收束成收藏理由：一日路线 + 适合人群 + 下期预告。",
+        branch: "评论区引导：想看孤独城市系列还是电影取景地系列。",
+        shot: "路线清单全屏 + 夕阳最后一帧。",
+        line: "“收藏这条，等你想一个人出发的时候再打开。”",
         emotion: "行动 / 想收藏"
       }
     ];
@@ -1554,8 +1646,8 @@
       { label: "行动", value: 90 }
     ];
     const templateRows = [
-      { date: "2026-05-10", title: "示例笔记标题", type: "图文", tag: "标签", reads: 12000, likes: 600, collects: 300, comments: 40, shares: 20, followers: 1500 },
-      { date: "2026-05-11", title: "第二篇笔记", type: "视频", tag: "标签", reads: 24000, likes: 1200, collects: 680, comments: 90, shares: 50, followers: 1580 }
+      { date: "2026-05-10", title: "洛杉矶格里菲斯天文台日落路线", type: "图文", tag: "洛杉矶", reads: 12000, likes: 600, collects: 520, comments: 40, shares: 80, followers: 1500 },
+      { date: "2026-05-11", title: "越南法餐为什么便宜又好吃", type: "视频", tag: "越南", reads: 24000, likes: 1200, collects: 980, comments: 90, shares: 160, followers: 1580 }
     ];
     const csvTemplate = [
       importColumns.join(","),
@@ -1767,6 +1859,81 @@
       });
     }
 
+
+    function destinationName(note) {
+      return note.tag || "未标记目的地";
+    }
+
+    function destinationStats() {
+      const groups = new Map();
+      selectedNotes().forEach(note => {
+        const key = destinationName(note);
+        const current = groups.get(key) || { name: key, count: 0, reads: 0, likes: 0, collects: 0, comments: 0, shares: 0 };
+        current.count += 1;
+        current.reads += note.reads;
+        current.likes += note.likes;
+        current.collects += note.collects;
+        current.comments += note.comments;
+        current.shares += note.shares;
+        groups.set(key, current);
+      });
+      return [...groups.values()].map(item => ({
+        ...item,
+        engagementRate: item.reads ? (item.likes + item.collects + item.comments + item.shares) / item.reads : 0,
+        saveRate: item.reads ? item.collects / item.reads : 0
+      })).sort((a, b) => b.reads - a.reads);
+    }
+
+    function renderStrategy() {
+      const notes = selectedNotes();
+      const destinations = destinationStats();
+      if (!notes.length) {
+        els.contentCompass.innerHTML = `<div class="empty-state">导入旅行笔记后，这里会自动拆出高收藏选题、低点击风险和补拍方向。</div>`;
+        els.destinationList.innerHTML = `<div class="empty-state">把“标签”填成目的地，例如 洛杉矶、贵州、越南。</div>`;
+        els.nextAction.innerHTML = `<strong>先导入 5 条旅行笔记</strong><span>建议包含标题、目的地标签、阅读、点赞、收藏、评论和分享，工作台会开始判断哪些城市值得做系列。</span>`;
+        return;
+      }
+
+      const avgEngagement = notes.reduce((sum, note) => sum + note.engagementRate, 0) / notes.length;
+      const bestSave = [...notes].sort((a, b) => (b.collects / Math.max(1, b.reads)) - (a.collects / Math.max(1, a.reads)))[0];
+      const highReachLowSave = [...notes]
+        .filter(note => note.reads > 0)
+        .sort((a, b) => (b.reads - a.reads) || ((a.collects / a.reads) - (b.collects / b.reads)))[0];
+      const bestDestination = destinations[0];
+      const insights = [
+        {
+          title: bestDestination ? `${bestDestination.name} 值得继续做系列` : "先补齐目的地标签",
+          meta: bestDestination ? `${bestDestination.count} 条笔记，累计 ${fmt(bestDestination.reads)} 阅读，收藏率 ${pct(bestDestination.saveRate)}。` : "标签越稳定，越容易判断城市栏目表现。"
+        },
+        {
+          title: bestSave ? `收藏价值最高：${bestSave.title}` : "寻找可收藏选题",
+          meta: bestSave ? `收藏率 ${pct(bestSave.collects / Math.max(1, bestSave.reads))}，适合扩展成路线、地图、价格清单。` : "攻略、路线、预算和机位通常更容易带来收藏。"
+        },
+        {
+          title: avgEngagement >= 0.08 ? "互动质量不错，可以加快发布节奏" : "互动偏低，下一条先强化开场和收藏理由",
+          meta: `当前筛选平均互动率 ${pct(avgEngagement)}。阅读低看封面标题，收藏低看信息密度。`
+        }
+      ];
+
+      els.contentCompass.innerHTML = insights.map(item => `
+        <div class="insight-item">
+          <div class="insight-title">${escapeHtml(item.title)}</div>
+          <div class="insight-meta">${escapeHtml(item.meta)}</div>
+        </div>
+      `).join("");
+      els.destinationList.innerHTML = destinations.slice(0, 4).map(item => `
+        <div class="destination-item">
+          <div class="destination-title">${escapeHtml(item.name)}</div>
+          <div class="destination-meta">${item.count} 条 · ${fmt(item.reads)} 阅读 · ${pct(item.engagementRate)} 互动 · ${pct(item.saveRate)} 收藏</div>
+        </div>
+      `).join("");
+      const focus = highReachLowSave || bestSave || notes[0];
+      els.nextAction.innerHTML = `
+        <strong>${escapeHtml(destinationName(focus))}：把“看过”变成“想收藏”</strong>
+        <span>下一条围绕《${escapeHtml(focus.title)}》延展：补一张路线图、3 个具体机位、预算/交通信息，并在标题里明确“可直接照着走”。</span>
+      `;
+    }
+
     function renderRank() {
       const metric = els.metric.value;
       const notes = selectedNotes().sort((a, b) => b[metric] - a[metric]).slice(0, 5);
@@ -1841,6 +2008,7 @@
 
     function render() {
       renderKpis();
+      renderStrategy();
       drawChart();
       renderRank();
       renderTable();
@@ -1856,13 +2024,13 @@
       };
     }
 
-    function defaultScriptMap(title = "为什么认真发笔记，数据还是起不来？") {
+    function defaultScriptMap(title = "珀斯为什么被叫作世界上最孤独的城市？") {
       return {
         id: `script-${Date.now()}-${Math.random().toString(16).slice(2)}`,
         title,
-        core: "用一条真实复盘，把“内容努力”和“用户感受”之间的落差讲清楚。",
-        audience: "正在做小红书但卡在选题、封面、开头的新手创作者。",
-        action: "引导收藏脚本表，并留言自己的笔记数据问题。",
+        core: "用城市漫游和个人感受，把“孤独”从标签拍成一条有温度的旅行故事。",
+        audience: "喜欢城市漫游、电影感旅行和独处体验的年轻旅行用户。",
+        action: "引导收藏珀斯路线，并评论想看的下一座“被误解的城市”。",
         rows: structuredClone(defaultScriptRows),
         emotions: structuredClone(defaultEmotionNodes)
       };
@@ -1970,10 +2138,10 @@
         day.newFollowers = prev && day.followers && prev.followers ? day.followers - prev.followers : 0;
       });
       return normalizeData({
-        account: "手动导入数据",
+        account: "奇仔旅行内容工作台",
         updatedAt: new Date().toLocaleString("zh-CN"),
         status: "manual",
-        message: `已手动导入 ${notes.length} 条笔记`,
+        message: `已导入 ${notes.length} 条旅行笔记`,
         daily,
         notes,
         scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? data.scriptMaps : [defaultScriptMap()]
@@ -2102,10 +2270,10 @@
         day.newFollowers = prev && day.followers && prev.followers ? day.followers - prev.followers : 0;
       });
       return normalizeData({
-        account: "手动导入数据",
+        account: "奇仔旅行内容工作台",
         updatedAt: new Date().toLocaleString("zh-CN"),
         status: "manual",
-        message: `已手动导入 ${notes.length} 条笔记`,
+        message: `已导入 ${notes.length} 条旅行笔记`,
         daily,
         notes,
         scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? data.scriptMaps : [defaultScriptMap()]

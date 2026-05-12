@@ -20,11 +20,11 @@ SESSION_COOKIE = "qizai_dashboard_session"
 
 def default_data():
     return {
-        "account": "小红书主页",
+        "account": "奇仔旅行内容工作台",
         "sourceUrl": "",
         "updatedAt": "",
         "status": "manual",
-        "message": "还没有导入数据。点击右上角导入 CSV 或 JSON。",
+        "message": "还没有导入旅行笔记数据。点击右上角导入 CSV 或 JSON。",
         "daily": [],
         "notes": [],
     }
@@ -151,7 +151,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>登录 · 奇仔的数据面板</title>
+  <title>登录 · 奇仔的旅行内容工作台</title>
   <style>
     * {{ box-sizing: border-box; }}
     body {{
@@ -199,7 +199,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 </head>
 <body>
   <form method="post" action="/login">
-    <h1>奇仔的数据面板</h1>
+    <h1>奇仔的旅行内容工作台</h1>
     <p>输入访问密码后继续。</p>
     {error_html}
     <label>
@@ -235,7 +235,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Serve Qizai dashboard with a SQLite database.")
+    parser = argparse.ArgumentParser(description="Serve Qizai travel content workspace with a SQLite database.")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", default=4174, type=int)
     parser.add_argument("--password", default="", help="Require a password before showing the dashboard.")
@@ -245,7 +245,7 @@ def main():
     DashboardHandler.password = args.password
     DashboardHandler.session_token = hashlib.sha256(f"{args.password}:{secrets.token_hex(16)}".encode("utf-8")).hexdigest()
     server = ThreadingHTTPServer((args.host, args.port), DashboardHandler)
-    print(f"Serving 奇仔的数据面板 on http://{args.host}:{args.port}/")
+    print(f"Serving 奇仔的旅行内容工作台 on http://{args.host}:{args.port}/")
     print(f"SQLite database: {DB_PATH}")
     if args.password:
         print("Password protection: enabled")
