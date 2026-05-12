@@ -151,6 +151,11 @@
       min-width: 0;
     }
 
+    main > section,
+    .topbar {
+      scroll-margin-top: 18px;
+    }
+
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -540,6 +545,287 @@
       background: #f3e8db;
       color: #66503f;
       font-size: 12px;
+    }
+
+
+
+    .project-system {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+      gap: 14px;
+      margin-bottom: 14px;
+      align-items: stretch;
+    }
+
+    .project-card,
+    .pipeline-card {
+      padding: 18px;
+    }
+
+    .project-identity {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .project-title {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.25;
+      outline: none;
+    }
+
+    .project-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
+      line-height: 1.6;
+      outline: none;
+    }
+
+    .project-badge {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      height: 30px;
+      border-radius: 999px;
+      padding: 0 11px;
+      background: #eef7f4;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .project-fields {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .project-field {
+      min-height: 76px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      padding: 11px;
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .project-field span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .project-field strong {
+      font-size: 14px;
+      line-height: 1.4;
+      outline: none;
+    }
+
+    .project-goals {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .goal-chip,
+    .platform-chip,
+    .topic-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 0 10px;
+      background: #fff7ea;
+      color: #66503f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .pipeline-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pipeline-step {
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+    }
+
+    .step-number {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--ink);
+      color: white;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .step-title {
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .step-meta {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr);
+      gap: 14px;
+      margin-top: 14px;
+      align-items: start;
+    }
+
+    .topics-module,
+    .shots-module {
+      margin-top: 14px;
+    }
+
+    .topic-list {
+      padding: 4px 18px 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .topic-row {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) minmax(280px, .9fr) auto;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+    }
+
+    .topic-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      color: var(--ink);
+      font-size: 12px;
+    }
+
+    .topic-meta-grid span {
+      min-height: 44px;
+      display: grid;
+      align-content: center;
+      gap: 3px;
+      padding: 7px 8px;
+      border-radius: 8px;
+      background: #fff7ea;
+      line-height: 1.25;
+    }
+
+    .topic-meta-grid b {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .topic-title-cell {
+      display: grid;
+      gap: 5px;
+      white-space: normal;
+    }
+
+    .topic-title-cell strong {
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .topic-title-cell span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .status-pill.hot {
+      background: #ffe4e8;
+      color: var(--red-dark);
+    }
+
+    .shot-board {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .shot-day {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      overflow: hidden;
+    }
+
+    .shot-day-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 12px;
+      background: #fff7ea;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .shot-list {
+      display: grid;
+    }
+
+    .shot-item {
+      display: grid;
+      grid-template-columns: 22px 1fr auto;
+      gap: 9px;
+      align-items: start;
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .shot-item:last-child {
+      border-bottom: 0;
+    }
+
+    .shot-check {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      border: 1px solid var(--green);
+      border-radius: 4px;
+      background: #eef7f4;
+    }
+
+    .shot-title {
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .shot-meta {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 3px;
     }
 
     .script-map {
@@ -1008,11 +1294,18 @@
       }
 
       .kpis,
+      .project-system,
+      .module-grid,
       .strategy-grid,
       .grid,
       .workspace,
       .script-layout {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .topic-row {
+        grid-template-columns: 1fr;
+        align-items: start;
       }
 
       .script-brief {
@@ -1042,6 +1335,8 @@
 
       .filters,
       .kpis,
+      .project-system,
+      .module-grid,
       .strategy-grid,
       .grid,
       .workspace,
@@ -1051,6 +1346,10 @@
       .script-brief,
       .nav {
         grid-template-columns: 1fr;
+      }
+
+      .topic-meta-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .status-pill {
@@ -1074,34 +1373,34 @@
         <div class="brand-mark">奇</div>
         <div>
           <strong>奇仔的旅行内容工作台</strong>
-          <span>小红书旅行创作中枢</span>
+          <span>旅游博主经营系统</span>
         </div>
       </div>
 
-      <nav class="nav" aria-label="数据视图">
+      <nav class="nav" aria-label="工作台模块">
         <button class="active" type="button" data-view="overview">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 13h8V3H3v10Z"/><path d="M13 21h8V11h-8v10Z"/><path d="M13 3v6h8V3h-8Z"/><path d="M3 21h8v-6H3v6Z"/></svg>
           总览
         </button>
-        <button type="button" data-view="growth">
+        <button type="button" data-view="project">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
-          涨粉
+          旅行项目
         </button>
-        <button type="button" data-view="notes">
+        <button type="button" data-view="topics">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16v16H4z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg>
-          笔记
-        </button>
-        <button type="button" data-view="shooting">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7h16v12H4z"/><path d="m8 7 2-3h4l2 3"/><circle cx="12" cy="13" r="3"/></svg>
-          拍摄计划
-        </button>
-        <button type="button" data-view="ideas">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.74V16h8v-1.26A7 7 0 0 0 12 2Z"/></svg>
-          灵感
+          选题库
         </button>
         <button type="button" data-view="script">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7h16v12H4z"/><path d="m8 7 2-3h4l2 3"/><circle cx="12" cy="13" r="3"/></svg>
+          脚本文案
+        </button>
+        <button type="button" data-view="shots">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.74V16h8v-1.26A7 7 0 0 0 12 2Z"/></svg>
+          拍摄清单
+        </button>
+        <button type="button" data-view="review">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/><path d="M8 3v18"/><path d="M16 3v18"/></svg>
-          脚本地图
+          数据复盘
         </button>
       </nav>
 
@@ -1138,8 +1437,8 @@
       <div class="topbar">
         <div>
           <h1>奇仔的旅行内容工作台</h1>
-          <p class="subtitle" id="periodText">把笔记数据、目的地线索和脚本节奏放在同一张桌面上</p>
-          <p class="load-status" id="loadStatus">导入 CSV / JSON 后，系统会按目的地和内容价值自动给出下一步建议</p>
+          <p class="subtitle" id="periodText">从一次旅行拆出选题、脚本、拍摄清单、发布计划和复盘数据</p>
+          <p class="load-status" id="loadStatus">先规划内容，再出发拍摄；导入数据后继续反哺下一次选题</p>
         </div>
         <div class="actions">
           <button class="tool-button" type="button" id="importButton" title="手动导入数据">
@@ -1156,7 +1455,7 @@
       <section class="kpis" aria-label="关键指标">
         <article class="kpi">
           <div>
-            <div class="kpi-title">总粉丝</div>
+            <div class="kpi-title">账号粉丝</div>
             <div class="kpi-value" id="fansValue">0</div>
           </div>
           <div class="delta" id="fansDelta">+0 近 30 天</div>
@@ -1177,7 +1476,7 @@
         </article>
         <article class="kpi">
           <div>
-            <div class="kpi-title">已发布路线</div>
+            <div class="kpi-title">已复盘内容</div>
             <div class="kpi-value" id="notesValue">0</div>
           </div>
           <div class="delta" id="notesDelta">本周期发布</div>
@@ -1199,7 +1498,322 @@
         </article>
       </section>
 
-      <section class="grid">
+      <section class="project-system" id="projectSection" aria-label="当前旅行项目">
+        <article class="panel project-card">
+          <div class="project-identity">
+            <div>
+              <div class="project-title" contenteditable="true">澳洲西海岸 7 天旅行项目</div>
+              <div class="project-subtitle" contenteditable="true">定位：电影感城市漫游 + 低压力攻略，把一次旅行拆成 14 天内容资产。</div>
+            </div>
+            <span class="project-badge">当前项目</span>
+          </div>
+          <div class="project-fields">
+            <div class="project-field">
+              <span>目的地</span>
+              <strong contenteditable="true">珀斯 / 淘金小镇</strong>
+            </div>
+            <div class="project-field">
+              <span>出行日期</span>
+              <strong contenteditable="true">2026/06/03 - 06/09</strong>
+            </div>
+            <div class="project-field">
+              <span>预算</span>
+              <strong contenteditable="true">¥8,000 内</strong>
+            </div>
+            <div class="project-field">
+              <span>目标平台</span>
+              <strong contenteditable="true">小红书 / 抖音 / B站</strong>
+            </div>
+          </div>
+          <div class="project-goals" aria-label="本次旅行目标">
+            <span class="goal-chip">涨粉</span>
+            <span class="goal-chip">攻略产品</span>
+            <span class="goal-chip">作品集</span>
+            <span class="goal-chip">品牌合作素材</span>
+          </div>
+        </article>
+
+        <article class="panel pipeline-card">
+          <div class="panel-head" style="padding: 0 0 12px;">
+            <div>
+              <h2>内容生产流程</h2>
+              <span class="table-meta">从旅行计划到现场执行的 4 个步骤</span>
+            </div>
+          </div>
+          <div class="pipeline-list">
+            <div class="pipeline-step">
+              <div class="step-number">1</div>
+              <div>
+                <div class="step-title">新建旅行项目</div>
+                <div class="step-meta">目的地、天数、预算、人设、平台和旅行目标先定下来。</div>
+              </div>
+              <span class="status-pill">已建</span>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-number">2</div>
+              <div>
+                <div class="step-title">生成 20 个选题</div>
+                <div class="step-meta">按攻略、故事、路线、情绪价值和商单展示拆方向。</div>
+              </div>
+              <span class="status-pill warm">筛选中</span>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-number">3</div>
+              <div>
+                <div class="step-title">选择 5 个生成脚本</div>
+                <div class="step-meta">为小红书图文、短视频和 B 站长视频准备不同版本。</div>
+              </div>
+              <span class="status-pill warm">待生成</span>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-number">4</div>
+              <div>
+                <div class="step-title">汇总每天拍摄清单</div>
+                <div class="step-meta">把内容计划翻译成现场能执行的镜头、口播和补拍提醒。</div>
+              </div>
+              <span class="status-pill hot">关键</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="topics-module" aria-label="选题库模块">
+        <article class="panel" id="topicsSection">
+          <div class="panel-head">
+            <div>
+              <h2>选题库</h2>
+              <span class="table-meta">目的地拆题 · 平台版本 · 状态推进</span>
+            </div>
+            <div class="table-tools">
+              <span class="platform-chip">小红书</span>
+              <span class="platform-chip">抖音</span>
+              <span class="platform-chip">B站</span>
+            </div>
+          </div>
+          <div class="topic-list">
+            <div class="topic-row">
+              <div class="topic-title-cell"><strong>珀斯为什么被叫作世界上最孤独的城市？</strong><span>爆点：目的地误解 + 情绪价值，适合作为系列开篇。</span></div>
+              <div class="topic-meta-grid">
+                <span><b>平台</b>小红书</span>
+                <span><b>类型</b>情绪价值</span>
+                <span><b>目标</b>涨粉</span>
+                <span><b>难度</b>中</span>
+              </div>
+              <span class="status-pill warm">待拍</span>
+            </div>
+            <div class="topic-row">
+              <div class="topic-title-cell"><strong>7 天西澳路线，不赶景点也能拍够 14 条内容</strong><span>爆点：路线包 + 内容资产，后续可沉淀攻略产品。</span></div>
+              <div class="topic-meta-grid">
+                <span><b>平台</b>小红书 / 公众号</span>
+                <span><b>类型</b>路线</span>
+                <span><b>目标</b>收藏</span>
+                <span><b>难度</b>低</span>
+              </div>
+              <span class="status-pill">待写</span>
+            </div>
+            <div class="topic-row">
+              <div class="topic-title-cell"><strong>淘金小镇的一天：游客会错过的三个当地故事</strong><span>爆点：人物和历史支线，提升视频厚度。</span></div>
+              <div class="topic-meta-grid">
+                <span><b>平台</b>抖音 / B站</span>
+                <span><b>类型</b>故事</span>
+                <span><b>目标</b>作品集</span>
+                <span><b>难度</b>高</span>
+              </div>
+              <span class="status-pill warm">待脚本</span>
+            </div>
+            <div class="topic-row">
+              <div class="topic-title-cell"><strong>珀斯旅行预算公开：交通、住宿、吃饭到底贵不贵</strong><span>爆点：价格透明 + 避坑，利于收藏和搜索流量。</span></div>
+              <div class="topic-meta-grid">
+                <span><b>平台</b>小红书</span>
+                <span><b>类型</b>避坑</span>
+                <span><b>目标</b>转化</span>
+                <span><b>难度</b>低</span>
+              </div>
+              <span class="status-pill">待写</span>
+            </div>
+          </div>
+        </article>
+
+
+      </section>
+
+
+
+      <section class="script-map">
+        <article class="panel" id="scriptSection">
+          <div class="panel-head">
+            <div>
+              <h2>旅行脚本地图</h2>
+              <span class="table-meta">开场钩子 · 地点故事 · 镜头 · 情绪线</span>
+            </div>
+            <div class="script-tools">
+              <select id="scriptSelect" aria-label="选择脚本地图"></select>
+              <button type="button" id="newScriptButton">新建脚本</button>
+              <button type="button" id="saveScriptButton">保存脚本</button>
+            </div>
+          </div>
+          <div class="script-shell">
+            <div class="script-brief">
+              <div class="brief-field">
+                <span>脚本标题</span>
+                <strong id="scriptTitle" contenteditable="true">珀斯为什么被叫作世界上最孤独的城市？</strong>
+              </div>
+              <div class="brief-field">
+                <span>一句话核心</span>
+                <div id="scriptCore" contenteditable="true">用城市漫游和个人感受，把“孤独”从标签拍成一条有温度的旅行故事。</div>
+              </div>
+              <div class="brief-field">
+                <span>目标观众</span>
+                <div id="scriptAudience" contenteditable="true">喜欢城市漫游、电影感旅行和独处体验的年轻旅行用户。</div>
+              </div>
+              <div class="brief-field">
+                <span>结尾行动</span>
+                <div id="scriptAction" contenteditable="true">引导收藏珀斯路线，并评论想看的下一座“被误解的城市”。</div>
+              </div>
+            </div>
+
+            <div class="script-layout">
+              <div class="script-table-wrap">
+                <table class="script-table">
+                  <thead>
+                    <tr>
+                      <th>时间段</th>
+                      <th>地点主线</th>
+                      <th>当地故事 / 信息点</th>
+                      <th>镜头 / 声音素材</th>
+                      <th>旁白 / 字幕</th>
+                      <th>情绪</th>
+                    </tr>
+                  </thead>
+                  <tbody id="scriptRows">
+                    <tr>
+                      <td><span class="time-chip" contenteditable="true">0-3s</span></td>
+                      <td><div contenteditable="true">直接抛出反差：大家都说珀斯孤独，但我在这里反而松了一口气。</div></td>
+                      <td><div contenteditable="true">点出城市标签：偏远、人口少、离其他大城市远。</div></td>
+                      <td><div contenteditable="true">海边空镜 + 街道慢走 + 地图拉远到澳洲西海岸。</div></td>
+                      <td><div contenteditable="true">“它不是无聊，是终于没有人催你快一点。”</div></td>
+                      <td><div contenteditable="true">好奇 / 松弛</div></td>
+                    </tr>
+                    <tr>
+                      <td><span class="time-chip" contenteditable="true">3-12s</span></td>
+                      <td><div contenteditable="true">展开城市漫游：从海边、公路、咖啡店到傍晚城市灯光。</div></td>
+                      <td><div contenteditable="true">补充交通、停留天数、适合谁来。</div></td>
+                      <td><div contenteditable="true">脚步声、车窗、咖啡杯、海浪、黄昏延时。</div></td>
+                      <td><div contenteditable="true">“如果你想把旅行过成暂停键，珀斯很适合。”</div></td>
+                      <td><div contenteditable="true">代入 / 想出发</div></td>
+                    </tr>
+                    <tr>
+                      <td><span class="time-chip" contenteditable="true">12-28s</span></td>
+                      <td><div contenteditable="true">给出可复制路线：上午海边，下午城市，傍晚看日落。</div></td>
+                      <td><div contenteditable="true">讲清预算、交通和拍照机位。</div></td>
+                      <td><div contenteditable="true">地图截图、路线箭头、机位示意、价格小票。</div></td>
+                      <td><div contenteditable="true">“这条路线不用赶景点，适合把一天慢慢过完。”</div></td>
+                      <td><div contenteditable="true">清晰 / 可收藏</div></td>
+                    </tr>
+                    <tr>
+                      <td><span class="time-chip" contenteditable="true">28-45s</span></td>
+                      <td><div contenteditable="true">插入当地故事：淘金小镇、移民、海边生活节奏。</div></td>
+                      <td><div contenteditable="true">让目的地从攻略变成有记忆点的人和历史。</div></td>
+                      <td><div contenteditable="true">老照片、街边招牌、当地人一句话采访。</div></td>
+                      <td><div contenteditable="true">“城市不是景点集合，它有自己的性格。”</div></td>
+                      <td><div contenteditable="true">理解 / 有厚度</div></td>
+                    </tr>
+                    <tr>
+                      <td><span class="time-chip" contenteditable="true">45-60s</span></td>
+                      <td><div contenteditable="true">收束成收藏理由：一日路线 + 适合人群 + 下期预告。</div></td>
+                      <td><div contenteditable="true">评论区引导：想看孤独城市系列还是电影取景地系列。</div></td>
+                      <td><div contenteditable="true">路线清单全屏 + 夕阳最后一帧。</div></td>
+                      <td><div contenteditable="true">“收藏这条，等你想一个人出发的时候再打开。”</div></td>
+                      <td><div contenteditable="true">行动 / 想收藏</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <aside class="script-side">
+                <div class="emotion-card">
+                  <h3>情绪曲线</h3>
+                  <svg class="emotion-curve" id="emotionCurve" viewBox="0 0 320 150" role="img" aria-label="情绪曲线"></svg>
+                  <div class="emotion-labels" id="emotionLabels"></div>
+                  <div class="emotion-editor" id="emotionEditor">
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">共鸣</div>
+                      <input type="range" min="0" max="100" value="25" aria-label="共鸣强度">
+                      <span class="emotion-value">25</span>
+                    </div>
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">冲突</div>
+                      <input type="range" min="0" max="100" value="82" aria-label="冲突强度">
+                      <span class="emotion-value">82</span>
+                    </div>
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">解释</div>
+                      <input type="range" min="0" max="100" value="38" aria-label="解释强度">
+                      <span class="emotion-value">38</span>
+                    </div>
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">恍然</div>
+                      <input type="range" min="0" max="100" value="66" aria-label="恍然强度">
+                      <span class="emotion-value">66</span>
+                    </div>
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">掌控</div>
+                      <input type="range" min="0" max="100" value="48" aria-label="掌控强度">
+                      <span class="emotion-value">48</span>
+                    </div>
+                    <div class="emotion-node">
+                      <div class="emotion-name" contenteditable="true">行动</div>
+                      <input type="range" min="0" max="100" value="90" aria-label="行动强度">
+                      <span class="emotion-value">90</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="template-card">
+                  <h3>旅行叙事模板</h3>
+                  <div class="beat-list">
+                    <div contenteditable="true">1. 先抛出一个目的地反差或误解。</div>
+                    <div contenteditable="true">2. 用第一人称体验进入，而不是马上做攻略。</div>
+                    <div contenteditable="true">3. 用价格、路线、历史或人物补足可信度。</div>
+                    <div contenteditable="true">4. 收束成一条可复制的路线或机位清单。</div>
+                    <div contenteditable="true">5. 结尾留下下一座城市或下一段故事的钩子。</div>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </article>
+
+
+      <section class="shots-module" aria-label="拍摄清单模块">
+        <article class="panel" id="shotsSection">
+          <div class="panel-head">
+            <div>
+              <h2>拍摄清单</h2>
+              <span class="table-meta">按天分组 · 素材缺口提醒</span>
+            </div>
+          </div>
+          <div class="shot-board">
+            <div class="shot-day">
+              <div class="shot-day-head"><span>Day 1 · 抵达珀斯</span><span>6 个镜头</span></div>
+              <div class="shot-list">
+                <div class="shot-item"><span class="shot-check"></span><div><div class="shot-title">机场到市区第一视角转场</div><div class="shot-meta">交通 · 对应选题：孤独城市开篇 · 优先级高</div></div><span class="status-pill">未拍</span></div>
+                <div class="shot-item"><span class="shot-check"></span><div><div class="shot-title">傍晚城市空镜 + 街声采样</div><div class="shot-meta">环境 · 可用于所有平台开头和 B-roll</div></div><span class="status-pill warm">必拍</span></div>
+                <div class="shot-item"><span class="shot-check"></span><div><div class="shot-title">30 秒口播：为什么选择珀斯</div><div class="shot-meta">口播 · 给后期脚本留人物线</div></div><span class="status-pill hot">缺口</span></div>
+              </div>
+            </div>
+            <div class="shot-day">
+              <div class="shot-day-head"><span>Day 2 · 海边和咖啡店</span><span>8 个镜头</span></div>
+              <div class="shot-list">
+                <div class="shot-item"><span class="shot-check"></span><div><div class="shot-title">海边远景、脚步、风声</div><div class="shot-meta">环境 · 情绪价值视频主素材</div></div><span class="status-pill warm">必拍</span></div>
+                <div class="shot-item"><span class="shot-check"></span><div><div class="shot-title">咖啡店价格牌和点单过程</div><div class="shot-meta">细节 · 预算公开 / 攻略产品素材</div></div><span class="status-pill">未拍</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid" id="reviewSection">
         <article class="panel">
           <div class="panel-head">
             <h2>旅行内容增长趋势</h2>
@@ -1260,36 +1874,37 @@
         </article>
       </section>
 
+      </section>
       <section class="workspace">
         <article class="panel" id="shootingSection">
           <div class="panel-head">
             <div>
-              <h2>旅程拍摄计划</h2>
-              <span class="table-meta">按城市、机位和补拍素材排期</span>
+              <h2>发布日历草稿</h2>
+              <span class="table-meta">一次旅行拆成 7 / 14 / 30 天发布计划</span>
             </div>
           </div>
           <div class="plan-board">
             <div class="plan-row">
               <div class="plan-date" contenteditable="true">05/12</div>
               <div>
-                <div class="plan-title" contenteditable="true">洛杉矶城市漫游：格里菲斯日落补拍</div>
-                <div class="plan-meta" contenteditable="true">镜头：远景天文台、城市灯光、La La Land 同款机位</div>
+                <div class="plan-title" contenteditable="true">发布：珀斯孤独城市开篇</div>
+                <div class="plan-meta" contenteditable="true">平台：小红书图文 · 目标：涨粉 · 状态：待封面</div>
               </div>
               <span class="status-pill warm">待拍摄</span>
             </div>
             <div class="plan-row">
               <div class="plan-date" contenteditable="true">05/14</div>
               <div>
-                <div class="plan-title" contenteditable="true">贵州洋芋国：街头小吃人物线</div>
-                <div class="plan-meta" contenteditable="true">素材：摊主采访、价格特写、第一口反应、方言声音</div>
+                <div class="plan-title" contenteditable="true">发布：7 天西澳路线包</div>
+                <div class="plan-meta" contenteditable="true">平台：公众号 / 小红书 · 目标：收藏与引流 · 状态：剪辑中</div>
               </div>
               <span class="status-pill">剪辑中</span>
             </div>
             <div class="plan-row">
               <div class="plan-date" contenteditable="true">05/17</div>
               <div>
-                <div class="plan-title" contenteditable="true">越南法餐：高性价比路线</div>
-                <div class="plan-meta" contenteditable="true">脚本：价格反差、菜单翻页、餐厅环境和结账镜头</div>
+                <div class="plan-title" contenteditable="true">发布：淘金小镇当地故事</div>
+                <div class="plan-meta" contenteditable="true">平台：B站 / 抖音 · 目标：作品集 · 状态：待脚本</div>
               </div>
               <span class="status-pill warm">待脚本</span>
             </div>
@@ -1299,188 +1914,43 @@
         <article class="panel" id="ideasSection">
           <div class="panel-head">
             <div>
-              <h2>目的地灵感池</h2>
-              <span class="table-meta">选题、开场和当地故事</span>
+              <h2>攻略产品草稿</h2>
+              <span class="table-meta">把内容资产沉淀成路线包、地图清单和产品页文案</span>
             </div>
           </div>
           <div class="idea-grid">
             <div class="idea-card">
               <div>
-                <div class="idea-title" contenteditable="true">世界上最孤独的城市，真的孤独吗？</div>
-                <div class="idea-meta" contenteditable="true">珀斯：海边、公路、城市空镜和独处情绪</div>
+                <div class="idea-title" contenteditable="true">《西澳 7 天内容路线包》目录</div>
+                <div class="idea-meta" contenteditable="true">路线、机位、预算、交通、素材清单，可做 PDF 或 Notion</div>
               </div>
-              <span class="idea-tag">复盘</span>
+              <span class="idea-tag">PDF</span>
             </div>
             <div class="idea-card">
               <div>
-                <div class="idea-title" contenteditable="true">在洛杉矶寻找《爱乐之城》的现实版本</div>
-                <div class="idea-meta" contenteditable="true">格里菲斯天文台、日落、城市灯海、电影感旁白</div>
+                <div class="idea-title" contenteditable="true">珀斯城市漫游地图清单</div>
+                <div class="idea-meta" contenteditable="true">可作为评论区引流赠品，收集私信关键词</div>
               </div>
-              <span class="idea-tag">系列</span>
+              <span class="idea-tag">地图</span>
             </div>
             <div class="idea-card">
               <div>
-                <div class="idea-title" contenteditable="true">越南为什么有这么多好吃的法餐？</div>
-                <div class="idea-meta" contenteditable="true">殖民历史、价格对比、餐厅地图、点单建议</div>
+                <div class="idea-title" contenteditable="true">品牌合作素材包</div>
+                <div class="idea-meta" contenteditable="true">酒店、交通、相机设备、当地体验品牌可复用片段</div>
               </div>
-              <span class="idea-tag">互动</span>
+              <span class="idea-tag">商单</span>
             </div>
             <div class="idea-card">
               <div>
-                <div class="idea-title" contenteditable="true">冰岛不是远方，是一场白日梦练习</div>
-                <div class="idea-meta" contenteditable="true">电影联想、公路空镜、风声、一个人的旅行旁白</div>
+                <div class="idea-title" contenteditable="true">旅行项目复盘模板</div>
+                <div class="idea-meta" contenteditable="true">发布后记录爆点、失败原因、私信咨询和转化数据</div>
               </div>
-              <span class="idea-tag">数据</span>
+              <span class="idea-tag">模板</span>
             </div>
           </div>
         </article>
       </section>
 
-      <section class="script-map">
-        <article class="panel" id="scriptSection">
-          <div class="panel-head">
-            <div>
-              <h2>旅行脚本地图</h2>
-              <span class="table-meta">开场钩子 · 地点故事 · 镜头 · 情绪线</span>
-            </div>
-            <div class="script-tools">
-              <select id="scriptSelect" aria-label="选择脚本地图"></select>
-              <button type="button" id="newScriptButton">新建脚本</button>
-              <button type="button" id="saveScriptButton">保存脚本</button>
-            </div>
-          </div>
-          <div class="script-shell">
-            <div class="script-brief">
-              <div class="brief-field">
-                <span>脚本标题</span>
-                <strong id="scriptTitle" contenteditable="true">珀斯为什么被叫作世界上最孤独的城市？</strong>
-              </div>
-              <div class="brief-field">
-                <span>一句话核心</span>
-                <div id="scriptCore" contenteditable="true">用城市漫游和个人感受，把“孤独”从标签拍成一条有温度的旅行故事。</div>
-              </div>
-              <div class="brief-field">
-                <span>目标观众</span>
-                <div id="scriptAudience" contenteditable="true">喜欢城市漫游、电影感旅行和独处体验的年轻旅行用户。</div>
-              </div>
-              <div class="brief-field">
-                <span>结尾行动</span>
-                <div id="scriptAction" contenteditable="true">引导收藏珀斯路线，并评论想看的下一座“被误解的城市”。</div>
-              </div>
-            </div>
-
-            <div class="script-layout">
-              <div class="script-table-wrap">
-                <table class="script-table">
-                  <thead>
-                    <tr>
-                      <th>时间段</th>
-                      <th>地点主线</th>
-                      <th>当地故事 / 信息点</th>
-                      <th>镜头 / 声音素材</th>
-                      <th>旁白 / 字幕</th>
-                      <th>情绪</th>
-                    </tr>
-                  </thead>
-                  <tbody id="scriptRows">
-                    <tr>
-                      <td><span class="time-chip" contenteditable="true">0-3s</span></td>
-                      <td><div contenteditable="true">直接抛出反差：明明认真做了，为什么没人看？</div></td>
-                      <td><div contenteditable="true">点出账号真实困境：阅读低、收藏少、标题不被点开。</div></td>
-                      <td><div contenteditable="true">后台数据快闪 + 皱眉看手机 + 笔记封面截图。</div></td>
-                      <td><div contenteditable="true">“我以为是内容不够努力，后来发现是开头没把人拉进来。”</div></td>
-                      <td><div contenteditable="true">好奇 / 共鸣</div></td>
-                    </tr>
-                    <tr>
-                      <td><span class="time-chip" contenteditable="true">3-12s</span></td>
-                      <td><div contenteditable="true">展示问题：同样选题，为什么别人爆了，我没有？</div></td>
-                      <td><div contenteditable="true">拆成三个变量：封面承诺、前 3 秒冲突、结尾收藏理由。</div></td>
-                      <td><div contenteditable="true">左右对比图、标题圈点、手写标注。</div></td>
-                      <td><div contenteditable="true">“不是你没有观点，而是用户还没来得及相信你。”</div></td>
-                      <td><div contenteditable="true">紧张 / 想知道答案</div></td>
-                    </tr>
-                    <tr>
-                      <td><span class="time-chip" contenteditable="true">12-28s</span></td>
-                      <td><div contenteditable="true">给出方法：把脚本拆成主线、支线和情绪线。</div></td>
-                      <td><div contenteditable="true">主线讲故事，支线给证据，情绪线控制观众停留。</div></td>
-                      <td><div contenteditable="true">脚本地图表格、彩色线条、关键词贴纸。</div></td>
-                      <td><div contenteditable="true">“你不是在写稿，你是在安排观众每 5 秒的感受。”</div></td>
-                      <td><div contenteditable="true">恍然 / 被点醒</div></td>
-                    </tr>
-                    <tr>
-                      <td><span class="time-chip" contenteditable="true">28-45s</span></td>
-                      <td><div contenteditable="true">用自己的笔记做一轮复盘，说明下一条怎么改。</div></td>
-                      <td><div contenteditable="true">连接数据面板：阅读、点赞、收藏分别对应不同问题。</div></td>
-                      <td><div contenteditable="true">数据面板录屏 + 改前改后标题对比。</div></td>
-                      <td><div contenteditable="true">“阅读低先改入口，点赞低改观点，收藏低改清单价值。”</div></td>
-                      <td><div contenteditable="true">清晰 / 有掌控感</div></td>
-                    </tr>
-                    <tr>
-                      <td><span class="time-chip" contenteditable="true">45-60s</span></td>
-                      <td><div contenteditable="true">收束：给观众一个可复制的脚本地图模板。</div></td>
-                      <td><div contenteditable="true">提示收藏、评论关键词、下期拆一个真实案例。</div></td>
-                      <td><div contenteditable="true">模板全屏展示 + 手指点到收藏按钮。</div></td>
-                      <td><div contenteditable="true">“下次别先写文案，先画这张地图。”</div></td>
-                      <td><div contenteditable="true">行动 / 想收藏</div></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <aside class="script-side">
-                <div class="emotion-card">
-                  <h3>情绪曲线</h3>
-                  <svg class="emotion-curve" id="emotionCurve" viewBox="0 0 320 150" role="img" aria-label="情绪曲线"></svg>
-                  <div class="emotion-labels" id="emotionLabels"></div>
-                  <div class="emotion-editor" id="emotionEditor">
-                    <div class="emotion-node">
-                      <div class="emotion-name" contenteditable="true">共鸣</div>
-                      <input type="range" min="0" max="100" value="25" aria-label="共鸣强度">
-                      <span class="emotion-value">25</span>
-                    </div>
-                    <div class="emotion-node">
-                      <div class="emotion-name" contenteditable="true">冲突</div>
-                      <input type="range" min="0" max="100" value="82" aria-label="冲突强度">
-                      <span class="emotion-value">82</span>
-                    </div>
-                    <div class="emotion-node">
-                      <div class="emotion-name" contenteditable="true">解释</div>
-                      <input type="range" min="0" max="100" value="38" aria-label="解释强度">
-                      <span class="emotion-value">38</span>
-                    </div>
-                    <div class="emotion-node">
-                      <div class="emotion-name" contenteditable="true">恍然</div>
-                      <input type="range" min="0" max="100" value="66" aria-label="恍然强度">
-                      <span class="emotion-value">66</span>
-                    </div>
-                    <div class="emotion-node">
-                      <div class="emotion-name" contenteditable="true">掌控</div>
-                      <input type="range" min="0" max="100" value="48" aria-label="掌控强度">
-                      <span class="emotion-value">48</span>
-                    </div>
-                    <div class="emotion-node">
-                      <div class="emotion-name" contenteditable="true">行动</div>
-                      <input type="range" min="0" max="100" value="90" aria-label="行动强度">
-                      <span class="emotion-value">90</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="template-card">
-                  <h3>旅行叙事模板</h3>
-                  <div class="beat-list">
-                    <div contenteditable="true">1. 先抛出一个目的地反差或误解。</div>
-                    <div contenteditable="true">2. 用第一人称体验进入，而不是马上做攻略。</div>
-                    <div contenteditable="true">3. 用价格、路线、历史或人物补足可信度。</div>
-                    <div contenteditable="true">4. 收束成一条可复制的路线或机位清单。</div>
-                    <div contenteditable="true">5. 结尾留下下一座城市或下一段故事的钩子。</div>
-                  </div>
-                </div>
-              </aside>
-            </div>
-          </div>
-        </article>
-      </section>
     </main>
   </div>
 
@@ -2494,21 +2964,45 @@
       });
     });
 
+    const navTargets = [
+      { view: "overview", selector: ".topbar" },
+      { view: "project", selector: "#projectSection" },
+      { view: "topics", selector: "#topicsSection" },
+      { view: "script", selector: "#scriptSection" },
+      { view: "shots", selector: "#shotsSection" },
+      { view: "review", selector: "#reviewSection" }
+    ];
+
+    function setActiveNav(view) {
+      document.querySelectorAll(".nav button").forEach(item => {
+        item.classList.toggle("active", item.dataset.view === view);
+      });
+    }
+
+    function currentNavView() {
+      const anchorLine = Math.max(80, window.innerHeight * 0.22);
+      let current = navTargets[0];
+      navTargets.forEach(target => {
+        const el = document.querySelector(target.selector);
+        if (!el) return;
+        if (el.getBoundingClientRect().top <= anchorLine) current = target;
+      });
+      return current.view;
+    }
+
+    function updateActiveNav() {
+      setActiveNav(currentNavView());
+    }
+
     document.querySelectorAll(".nav button").forEach(button => {
       button.addEventListener("click", () => {
-        document.querySelectorAll(".nav button").forEach(item => item.classList.toggle("active", item === button));
-        const targets = {
-          overview: ".topbar",
-          growth: ".grid",
-          notes: ".lower",
-          shooting: "#shootingSection",
-          ideas: "#ideasSection",
-          script: "#scriptSection"
-        };
-        const target = targets[button.dataset.view] || ".topbar";
-        document.querySelector(target).scrollIntoView({ behavior: "smooth", block: "start" });
+        const target = navTargets.find(item => item.view === button.dataset.view);
+        setActiveNav(button.dataset.view);
+        document.querySelector(target?.selector || ".topbar").scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
+
+    window.addEventListener("scroll", updateActiveNav, { passive: true });
 
     els.emotionEditor.addEventListener("input", renderEmotionCurve);
     els.emotionEditor.addEventListener("keyup", renderEmotionCurve);
