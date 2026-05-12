@@ -2345,8 +2345,12 @@
       daily: [],
       notes: [],
       scriptMaps: [],
+      scriptMapsUpdatedAt: 0,
       staticWorkbench: []
     };
+
+    const SCRIPT_MAPS_KEY = "qizai-travel-script-maps-v1";
+    const STATIC_WORKBENCH_KEY = "qizai-travel-workbench-static-v1";
 
     let data = structuredClone(emptyData);
     let currentChart = "followers";
@@ -2354,6 +2358,7 @@
     let sortDir = "desc";
     let currentScriptIndex = 0;
     let staticSaveTimer = null;
+    let scriptSaveTimer = null;
 
     const els = {
       range: document.querySelector("#rangeSelect"),
@@ -2820,7 +2825,10 @@
         daily: Array.isArray(nextData.daily) ? nextData.daily : [],
         notes: Array.isArray(nextData.notes) ? nextData.notes : [],
         scriptMaps: Array.isArray(nextData.scriptMaps) && nextData.scriptMaps.length ? nextData.scriptMaps : [defaultScriptMap()],
-        staticWorkbench: Array.isArray(nextData.staticWorkbench) ? nextData.staticWorkbench : []
+        scriptMapsUpdatedAt: Number(nextData.scriptMapsUpdatedAt || 0),
+        staticWorkbench: nextData.staticWorkbench && (Array.isArray(nextData.staticWorkbench) || Array.isArray(nextData.staticWorkbench.items))
+          ? nextData.staticWorkbench
+          : []
       };
     }
 
@@ -2858,6 +2866,7 @@
         }
       }
       ensureScriptMaps();
+      restoreScriptMapsState();
       render();
       renderScriptSelector();
       renderScriptMap(currentScriptIndex);
@@ -2945,7 +2954,9 @@
         message: `已导入 ${notes.length} 条旅行笔记`,
         daily,
         notes,
-        scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? data.scriptMaps : [defaultScriptMap()]
+        scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? data.scriptMaps : [defaultScriptMap()],
+        scriptMapsUpdatedAt: Number(data.scriptMapsUpdatedAt || 0),
+        staticWorkbench: data.staticWorkbench
       });
     }
 
@@ -3005,7 +3016,7 @@
         lastRow?.scrollIntoView({ behavior: "smooth", block: "center" });
         lastRow?.querySelector('[data-script-field="time"]')?.focus();
       });
-      els.loadStatus.textContent = "已新增时间段，编辑后点击保存脚本";
+      saveScriptMapsState("已新增时间段，正在自动保存");
     }
 
     function deleteScriptRow() {
@@ -3016,7 +3027,7 @@
       }
       rows.pop();
       renderScriptRows(rows);
-      els.loadStatus.textContent = "已删除末段，编辑后点击保存脚本";
+      saveScriptMapsState("已删除末段，正在自动保存");
     }
 
     function renderEmotionEditor(emotions) {
@@ -3065,8 +3076,90 @@
       data.scriptMaps[currentScriptIndex] = collectCurrentScriptMap();
     }
 
+    function normalizeScriptMapsRecord(value) {
+      if (Array.isArray(value)) return { updatedAt: 0, maps: value, currentScriptIndex: 0 };
+      if (value && Array.isArray(value.maps)) {
+        return {
+          updatedAt: Number(value.updatedAt || 0),
+          maps: value.maps,
+          currentScriptIndex: Number(value.currentScriptIndex || 0)
+        };
+      }
+      return { updatedAt: 0, maps: [], currentScriptIndex: 0 };
+    }
+
+    function localScriptMapsRecord() {
+      try {
+        return normalizeScriptMapsRecord(JSON.parse(localStorage.getItem(SCRIPT_MAPS_KEY) || "null"));
+      } catch (error) {
+        localStorage.removeItem(SCRIPT_MAPS_KEY);
+        return { updatedAt: 0, maps: [], currentScriptIndex: 0 };
+      }
+    }
+
+    function scriptMapsRecord() {
+      return {
+        updatedAt: Number(data.scriptMapsUpdatedAt || 0),
+        maps: Array.isArray(data.scriptMaps) ? data.scriptMaps : [],
+        currentScriptIndex
+      };
+    }
+
+    function persistScriptMapsLocal() {
+      localStorage.setItem(SCRIPT_MAPS_KEY, JSON.stringify(scriptMapsRecord()));
+    }
+
+    function markScriptMapsChanged() {
+      data.scriptMapsUpdatedAt = Date.now();
+      persistScriptMapsLocal();
+    }
+
+    function scheduleScriptMapsSync(delay = 650) {
+      window.clearTimeout(scriptSaveTimer);
+      scriptSaveTimer = window.setTimeout(syncScriptMapsState, delay);
+    }
+
+    function saveScriptMapsState(message = "脚本地图正在自动保存") {
+      storeCurrentScriptMap();
+      markScriptMapsChanged();
+      els.loadStatus.textContent = message;
+      scheduleScriptMapsSync();
+    }
+
+    async function syncScriptMapsState() {
+      try {
+        const response = await fetch("/api/dashboard", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        els.loadStatus.textContent = "脚本地图已自动保存并同步";
+      } catch (error) {
+        els.loadStatus.textContent = "脚本地图已保存到本机，线上同步暂不可用";
+      }
+    }
+
+    function restoreScriptMapsState() {
+      const serverRecord = normalizeScriptMapsRecord({
+        updatedAt: data.scriptMapsUpdatedAt,
+        maps: data.scriptMaps,
+        currentScriptIndex
+      });
+      const localRecord = localScriptMapsRecord();
+      const record = localRecord.updatedAt > serverRecord.updatedAt ? localRecord : serverRecord;
+      if (!record.maps.length) return;
+      data.scriptMaps = record.maps;
+      data.scriptMapsUpdatedAt = record.updatedAt;
+      currentScriptIndex = Math.min(Math.max(record.currentScriptIndex || 0, 0), data.scriptMaps.length - 1);
+      if (record === localRecord && localRecord.updatedAt > serverRecord.updatedAt) {
+        scheduleScriptMapsSync(200);
+      }
+    }
+
     async function saveCurrentScriptMap() {
       storeCurrentScriptMap();
+      markScriptMapsChanged();
       const baseMessage = data.message || "脚本地图已更新";
       data.message = "脚本地图已保存";
       await saveDataFile();
@@ -3115,7 +3208,9 @@
         message: `已导入 ${notes.length} 条旅行笔记`,
         daily,
         notes,
-        scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? data.scriptMaps : [defaultScriptMap()]
+        scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? data.scriptMaps : [defaultScriptMap()],
+        scriptMapsUpdatedAt: Number(data.scriptMapsUpdatedAt || 0),
+        staticWorkbench: data.staticWorkbench
       });
     }
 
@@ -3351,7 +3446,6 @@
       els.loadStatus.textContent = `已将状态改为：${select.value}`;
     });
 
-    const STATIC_WORKBENCH_KEY = "qizai-travel-workbench-static-v1";
     const staticPersistSelectors = [
       "#projectSection [contenteditable=\"true\"]",
       ".pipeline-card [contenteditable=\"true\"]",
@@ -3449,16 +3543,22 @@
       if (!record.items.length) return;
       staticPersistNodes().forEach((node, index) => applyStaticNodeState(node, record.items[index]));
       document.querySelectorAll(".status-select").forEach(applyStatusSelectClass);
+      data.staticWorkbench = record;
+      localStorage.setItem(STATIC_WORKBENCH_KEY, JSON.stringify(record));
       if (record === localRecord && localRecord.updatedAt > serverRecord.updatedAt) {
-        data.staticWorkbench = localRecord;
         scheduleStaticWorkbenchSync(200);
       }
     }
 
     window.addEventListener("beforeunload", () => {
-      if (!localStorage.getItem(STATIC_WORKBENCH_KEY)) return;
-      data.staticWorkbench = localStaticWorkbenchRecord();
+      storeCurrentScriptMap();
+      markScriptMapsChanged();
+      const localStaticRecord = localStaticWorkbenchRecord();
+      if (localStaticRecord.items.length) {
+        data.staticWorkbench = localStaticRecord;
+      }
       window.clearTimeout(staticSaveTimer);
+      window.clearTimeout(scriptSaveTimer);
       navigator.sendBeacon?.("/api/dashboard", new Blob([JSON.stringify(data)], { type: "application/json" }));
     });
 
@@ -3547,25 +3647,41 @@
 
     window.addEventListener("scroll", updateActiveNav, { passive: true });
 
-    els.emotionEditor.addEventListener("input", renderEmotionCurve);
+    [els.scriptTitle, els.scriptCore, els.scriptAudience, els.scriptAction, els.scriptRows].forEach(node => {
+      node.addEventListener("input", () => saveScriptMapsState());
+    });
+    els.emotionEditor.addEventListener("input", () => {
+      renderEmotionCurve();
+      saveScriptMapsState();
+    });
     els.emotionEditor.addEventListener("keyup", renderEmotionCurve);
     els.emotionCurve.addEventListener("pointerdown", startEmotionDrag);
     els.emotionCurve.addEventListener("pointermove", moveEmotionDrag);
-    els.emotionCurve.addEventListener("pointerup", stopEmotionDrag);
-    els.emotionCurve.addEventListener("pointercancel", stopEmotionDrag);
+    els.emotionCurve.addEventListener("pointerup", event => {
+      stopEmotionDrag(event);
+      saveScriptMapsState();
+    });
+    els.emotionCurve.addEventListener("pointercancel", event => {
+      stopEmotionDrag(event);
+      saveScriptMapsState();
+    });
     els.scriptSelect.addEventListener("change", () => {
       storeCurrentScriptMap();
+      markScriptMapsChanged();
       currentScriptIndex = Number(els.scriptSelect.value) || 0;
+      persistScriptMapsLocal();
+      scheduleScriptMapsSync();
       renderScriptMap(currentScriptIndex);
       renderScriptSelector();
     });
     document.querySelector("#newScriptButton").addEventListener("click", () => {
       storeCurrentScriptMap();
+      markScriptMapsChanged();
       data.scriptMaps.push(defaultScriptMap(`新脚本 ${data.scriptMaps.length + 1}`));
       currentScriptIndex = data.scriptMaps.length - 1;
       renderScriptSelector();
       renderScriptMap(currentScriptIndex);
-      els.loadStatus.textContent = "已新建脚本，编辑后点击保存脚本";
+      saveScriptMapsState("已新建脚本，正在自动保存");
     });
     document.querySelector("#addScriptRowButton").addEventListener("click", addScriptRow);
     document.querySelector("#deleteScriptRowButton").addEventListener("click", deleteScriptRow);
