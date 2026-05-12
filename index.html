@@ -2344,7 +2344,8 @@
       message: "还没有导入旅行笔记数据。点击右上角导入 CSV 或 JSON。",
       daily: [],
       notes: [],
-      scriptMaps: []
+      scriptMaps: [],
+      staticWorkbench: []
     };
 
     let data = structuredClone(emptyData);
@@ -2352,6 +2353,7 @@
     let sortKey = "reads";
     let sortDir = "desc";
     let currentScriptIndex = 0;
+    let staticSaveTimer = null;
 
     const els = {
       range: document.querySelector("#rangeSelect"),
@@ -2817,7 +2819,8 @@
         ...nextData,
         daily: Array.isArray(nextData.daily) ? nextData.daily : [],
         notes: Array.isArray(nextData.notes) ? nextData.notes : [],
-        scriptMaps: Array.isArray(nextData.scriptMaps) && nextData.scriptMaps.length ? nextData.scriptMaps : [defaultScriptMap()]
+        scriptMaps: Array.isArray(nextData.scriptMaps) && nextData.scriptMaps.length ? nextData.scriptMaps : [defaultScriptMap()],
+        staticWorkbench: Array.isArray(nextData.staticWorkbench) ? nextData.staticWorkbench : []
       };
     }
 
@@ -2858,6 +2861,7 @@
       render();
       renderScriptSelector();
       renderScriptMap(currentScriptIndex);
+      restoreStaticWorkbenchState();
     }
 
     async function saveDataFile() {
@@ -3343,7 +3347,119 @@
       const select = event.target.closest(".status-select");
       if (!select) return;
       applyStatusSelectClass(select);
+      saveStaticWorkbenchState();
       els.loadStatus.textContent = `已将状态改为：${select.value}`;
+    });
+
+    const STATIC_WORKBENCH_KEY = "qizai-travel-workbench-static-v1";
+    const staticPersistSelectors = [
+      "#projectSection [contenteditable=\"true\"]",
+      ".pipeline-card [contenteditable=\"true\"]",
+      ".pipeline-card .editable-status",
+      "#topicsSection [contenteditable=\"true\"]",
+      "#topicsSection .status-select",
+      "#shotsSection [contenteditable=\"true\"]",
+      "#shotsSection .status-select",
+      "#shotsSection .shot-check",
+      ".workspace [contenteditable=\"true\"]",
+      ".workspace .editable-status"
+    ];
+
+    function staticPersistNodes() {
+      return staticPersistSelectors.flatMap(selector => [...document.querySelectorAll(selector)]);
+    }
+
+    function staticNodeState(node) {
+      if (node.matches("select")) return { value: node.value };
+      if (node.matches(".shot-check")) return { done: node.classList.contains("done") };
+      if (node.matches(".editable-status")) return { text: node.textContent.trim(), className: node.className };
+      return { html: node.innerHTML };
+    }
+
+    function applyStaticNodeState(node, state) {
+      if (!state) return;
+      if (node.matches("select")) {
+        node.value = state.value || node.value;
+        applyStatusSelectClass(node);
+        return;
+      }
+      if (node.matches(".shot-check")) {
+        node.classList.toggle("done", Boolean(state.done));
+        return;
+      }
+      if (node.matches(".editable-status")) {
+        node.textContent = state.text || node.textContent;
+        if (state.className) node.className = state.className;
+        return;
+      }
+      if (typeof state.html === "string") node.innerHTML = state.html;
+    }
+
+    function staticWorkbenchItems() {
+      return staticPersistNodes().map(staticNodeState);
+    }
+
+    function normalizeStaticWorkbenchRecord(value) {
+      if (Array.isArray(value)) return { updatedAt: 0, items: value };
+      if (value && Array.isArray(value.items)) {
+        return { updatedAt: Number(value.updatedAt || 0), items: value.items };
+      }
+      return { updatedAt: 0, items: [] };
+    }
+
+    function localStaticWorkbenchRecord() {
+      try {
+        return normalizeStaticWorkbenchRecord(JSON.parse(localStorage.getItem(STATIC_WORKBENCH_KEY) || "null"));
+      } catch (error) {
+        localStorage.removeItem(STATIC_WORKBENCH_KEY);
+        return { updatedAt: 0, items: [] };
+      }
+    }
+
+    function saveStaticWorkbenchState() {
+      const record = { updatedAt: Date.now(), items: staticWorkbenchItems() };
+      data.staticWorkbench = record;
+      localStorage.setItem(STATIC_WORKBENCH_KEY, JSON.stringify(record));
+      scheduleStaticWorkbenchSync();
+    }
+
+    function scheduleStaticWorkbenchSync(delay = 650) {
+      window.clearTimeout(staticSaveTimer);
+      staticSaveTimer = window.setTimeout(syncStaticWorkbenchState, delay);
+    }
+
+    async function syncStaticWorkbenchState() {
+      try {
+        const response = await fetch("/api/dashboard", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        els.loadStatus.textContent = "已自动保存并同步";
+      } catch (error) {
+        els.loadStatus.textContent = "已保存到本机，线上同步暂不可用";
+      }
+    }
+
+    function restoreStaticWorkbenchState() {
+      const serverRecord = normalizeStaticWorkbenchRecord(data.staticWorkbench);
+      const localRecord = localStaticWorkbenchRecord();
+      const record = localRecord.updatedAt > serverRecord.updatedAt ? localRecord : serverRecord;
+      if (!record.items.length) return;
+      staticPersistNodes().forEach((node, index) => applyStaticNodeState(node, record.items[index]));
+      document.querySelectorAll(".status-select").forEach(applyStatusSelectClass);
+      if (record === localRecord && localRecord.updatedAt > serverRecord.updatedAt) {
+        data.staticWorkbench = localRecord;
+        scheduleStaticWorkbenchSync(200);
+      }
+    }
+
+    window.addEventListener("beforeunload", () => {
+      if (!localStorage.getItem(STATIC_WORKBENCH_KEY)) return;
+      data.staticWorkbench = localStaticWorkbenchRecord();
+      window.clearTimeout(staticSaveTimer);
+      navigator.sendBeacon?.("/api/dashboard", new Blob([JSON.stringify(data)], { type: "application/json" }));
     });
 
     const statusCycle = {
@@ -3373,13 +3489,22 @@
         const next = cycle[(cycle.indexOf(current) + 1) % cycle.length] || cycle[0];
         status.textContent = next;
         status.className = statusClass(next);
-        els.loadStatus.textContent = "已更新状态，静态模块会保存在当前页面预览中";
+        saveStaticWorkbenchState();
+        els.loadStatus.textContent = "已更新状态，正在同步";
       }
       const check = event.target.closest(".shot-check");
       if (check) {
         check.classList.toggle("done");
-        els.loadStatus.textContent = check.classList.contains("done") ? "已标记镜头完成" : "已取消镜头完成标记";
+        saveStaticWorkbenchState();
+        els.loadStatus.textContent = check.classList.contains("done") ? "已标记镜头完成，正在同步" : "已取消镜头完成标记，正在同步";
       }
+    });
+
+    document.addEventListener("input", event => {
+      if (!event.target.closest('[contenteditable="true"]')) return;
+      if (!staticPersistNodes().includes(event.target.closest('[contenteditable="true"]'))) return;
+      saveStaticWorkbenchState();
+      els.loadStatus.textContent = "正在同步";
     });
 
     const navTargets = [
