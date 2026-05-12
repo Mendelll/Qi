@@ -7,17 +7,20 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f6f4ef;
-      --panel: #fffdf8;
-      --ink: #1f2428;
-      --muted: #6b7280;
-      --line: #e7e0d4;
-      --red: #e84855;
-      --red-dark: #bd2635;
-      --green: #148f77;
-      --blue: #2f6fbe;
-      --yellow: #c68a14;
-      --shadow: 0 12px 32px rgba(33, 29, 23, .08);
+      --bg: #f7f3ea;
+      --sidebar: #f1eadf;
+      --panel: #fffcf6;
+      --panel-soft: #fbf6ed;
+      --ink: #2d2926;
+      --muted: #746b62;
+      --line: #ded3c3;
+      --line-soft: #ebe2d5;
+      --red: #c96442;
+      --red-dark: #9f4f34;
+      --green: #597d62;
+      --blue: #516f85;
+      --yellow: #9a7130;
+      --shadow: 0 1px 2px rgba(45, 41, 38, .05), 0 10px 28px rgba(45, 41, 38, .06);
     }
 
     * {
@@ -29,6 +32,8 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
       background: var(--bg);
       color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     button,
@@ -37,16 +42,23 @@
       font: inherit;
     }
 
+    button,
+    input,
+    select,
+    table {
+      font: inherit;
+    }
+
     .app {
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 264px 1fr;
+      grid-template-columns: 280px 1fr;
     }
 
     aside {
       border-right: 1px solid var(--line);
-      background: #fffaf1;
-      padding: 24px 18px;
+      background: var(--sidebar);
+      padding: 22px 18px;
       position: sticky;
       top: 0;
       height: 100vh;
@@ -110,7 +122,7 @@
 
     .nav button.active,
     .nav button:hover {
-      background: white;
+      background: var(--panel);
       border-color: var(--line);
       box-shadow: 0 4px 14px rgba(33, 29, 23, .05);
     }
@@ -138,7 +150,7 @@
     input {
       width: 100%;
       border: 1px solid var(--line);
-      background: white;
+      background: var(--panel);
       border-radius: 8px;
       height: 40px;
       padding: 0 11px;
@@ -147,7 +159,8 @@
     }
 
     main {
-      padding: 26px;
+      width: min(1220px, 100%);
+      padding: 30px 32px 48px;
       min-width: 0;
     }
 
@@ -166,7 +179,7 @@
 
     h1 {
       margin: 0 0 7px;
-      font-size: 28px;
+      font-size: 34px;
       line-height: 1.2;
       letter-spacing: 0;
     }
@@ -269,7 +282,7 @@
     }
 
     h2 {
-      font-size: 16px;
+      font-size: 18px;
       margin: 0;
       letter-spacing: 0;
     }
@@ -280,7 +293,7 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       overflow: hidden;
-      background: white;
+      background: var(--panel);
     }
 
     .seg button {
@@ -336,7 +349,7 @@
       border-radius: 8px;
       display: grid;
       place-items: center;
-      background: #f3e8db;
+      background: #eee3d3;
       font-weight: 800;
       font-size: 13px;
     }
@@ -434,7 +447,7 @@
       padding: 14px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
     }
 
     .next-action strong {
@@ -478,7 +491,7 @@
       padding: 12px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
     }
 
     .plan-date {
@@ -508,7 +521,7 @@
       display: inline-grid;
       place-items: center;
       padding: 0 10px;
-      background: #eef7f4;
+      background: #edf2eb;
       color: var(--green);
       font-size: 12px;
       font-weight: 800;
@@ -516,7 +529,7 @@
     }
 
     .status-pill.warm {
-      background: #fff1d6;
+      background: #f5ead5;
       color: var(--yellow);
     }
 
@@ -528,7 +541,7 @@
       min-height: 126px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
       padding: 14px;
       display: grid;
       align-content: space-between;
@@ -542,8 +555,8 @@
       align-items: center;
       border-radius: 999px;
       padding: 0 9px;
-      background: #f3e8db;
-      color: #66503f;
+      background: #eee3d3;
+      color: #6b5948;
       font-size: 12px;
     }
 
@@ -551,15 +564,16 @@
 
     .project-system {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+      grid-template-columns: minmax(0, 1fr);
       gap: 14px;
       margin-bottom: 14px;
-      align-items: stretch;
+      align-items: start;
     }
 
     .project-card,
     .pipeline-card {
       padding: 18px;
+      align-self: start;
     }
 
     .project-identity {
@@ -592,7 +606,7 @@
       height: 30px;
       border-radius: 999px;
       padding: 0 11px;
-      background: #eef7f4;
+      background: #edf2eb;
       color: var(--green);
       font-size: 12px;
       font-weight: 800;
@@ -601,20 +615,21 @@
 
     .project-fields {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 10px;
       margin-bottom: 14px;
     }
 
     .project-field {
-      min-height: 76px;
+      min-height: 92px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
       padding: 11px;
       display: grid;
       gap: 6px;
       align-content: start;
+      min-width: 0;
     }
 
     .project-field span {
@@ -624,9 +639,11 @@
     }
 
     .project-field strong {
-      font-size: 14px;
-      line-height: 1.4;
+      font-size: 15px;
+      line-height: 1.45;
       outline: none;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .project-goals {
@@ -643,26 +660,27 @@
       min-height: 26px;
       border-radius: 999px;
       padding: 0 10px;
-      background: #fff7ea;
-      color: #66503f;
+      background: var(--panel-soft);
+      color: #6b5948;
       font-size: 12px;
       font-weight: 700;
     }
 
     .pipeline-list {
       display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
     }
 
     .pipeline-step {
       display: grid;
-      grid-template-columns: 34px 1fr auto;
+      grid-template-columns: 34px 1fr;
       gap: 10px;
-      align-items: center;
+      align-items: start;
       padding: 10px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
     }
 
     .step-number {
@@ -680,6 +698,12 @@
     .step-title {
       font-weight: 800;
       font-size: 14px;
+    }
+
+    .pipeline-step .status-pill {
+      grid-column: 2;
+      justify-self: start;
+      margin-top: 8px;
     }
 
     .step-meta {
@@ -716,7 +740,7 @@
       padding: 12px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
     }
 
     .topic-meta-grid {
@@ -734,7 +758,7 @@
       gap: 3px;
       padding: 7px 8px;
       border-radius: 8px;
-      background: #fff7ea;
+      background: var(--panel-soft);
       line-height: 1.25;
     }
 
@@ -760,8 +784,91 @@
       line-height: 1.45;
     }
 
+    [contenteditable="true"] {
+      outline: none;
+      border-radius: 6px;
+    }
+
+    [contenteditable="true"]:focus {
+      background: rgba(255, 252, 246, .9);
+      box-shadow: 0 0 0 3px rgba(201, 185, 166, .22);
+    }
+
+    .editable-status {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .status-select-wrap {
+      position: relative;
+      justify-self: end;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: #f3ead8;
+      color: #8c681f;
+      box-shadow: inset 0 0 0 1px rgba(140, 104, 31, .08);
+    }
+
+    .status-select-wrap::after {
+      content: "";
+      position: absolute;
+      right: 14px;
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg) translateY(-2px);
+      pointer-events: none;
+      opacity: .86;
+    }
+
+    .status-select-wrap.todo {
+      background: #f6ecd4;
+      color: #93681d;
+    }
+
+    .status-select-wrap.in-progress {
+      background: #eadfca;
+      color: #6f6252;
+    }
+
+    .status-select-wrap.done {
+      background: #e6efe6;
+      color: #52775f;
+    }
+
+    .status-select {
+      width: 100%;
+      min-width: 112px;
+      height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 0 38px 0 18px;
+      color: inherit;
+      background: transparent;
+      font-weight: 760;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      text-align: left;
+      outline: none;
+    }
+
+    .status-select:focus-visible {
+      box-shadow: 0 0 0 3px rgba(201, 185, 166, .28);
+    }
+
+    .topic-meta-grid em {
+      font-style: normal;
+      color: var(--ink);
+      outline: none;
+      border-radius: 5px;
+    }
+
     .status-pill.hot {
-      background: #ffe4e8;
+      background: #f6e7df;
       color: var(--red-dark);
     }
 
@@ -774,7 +881,7 @@
     .shot-day {
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
       overflow: hidden;
     }
 
@@ -783,7 +890,7 @@
       justify-content: space-between;
       gap: 10px;
       padding: 11px 12px;
-      background: #fff7ea;
+      background: var(--panel-soft);
       border-bottom: 1px solid var(--line);
       font-size: 13px;
       font-weight: 800;
@@ -807,12 +914,18 @@
     }
 
     .shot-check {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       margin-top: 2px;
       border: 1px solid var(--green);
-      border-radius: 4px;
-      background: #eef7f4;
+      border-radius: 5px;
+      background: #edf2eb;
+      cursor: pointer;
+    }
+
+    .shot-check.done {
+      background: var(--green);
+      box-shadow: inset 0 0 0 4px #edf2eb;
     }
 
     .shot-title {
@@ -848,7 +961,7 @@
       min-height: 76px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
       padding: 12px;
       display: grid;
       gap: 8px;
@@ -879,7 +992,7 @@
       overflow: auto;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
     }
 
     .script-table {
@@ -890,7 +1003,7 @@
     }
 
     .script-table th {
-      background: #fff7ea;
+      background: var(--panel-soft);
       cursor: default;
     }
 
@@ -923,9 +1036,13 @@
       height: 36px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
       padding: 0 11px;
       cursor: pointer;
+    }
+
+    #deleteScriptRowButton {
+      color: var(--muted);
     }
 
     .time-chip {
@@ -934,7 +1051,7 @@
       height: 24px;
       border-radius: 999px;
       padding: 0 9px;
-      background: #eef7f4;
+      background: #edf2eb;
       color: var(--green);
       font-weight: 800;
       white-space: nowrap;
@@ -949,7 +1066,7 @@
     .template-card {
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: white;
+      background: var(--panel);
       padding: 14px;
     }
 
@@ -1032,7 +1149,7 @@
     .beat-list div {
       padding: 9px 10px;
       border-radius: 8px;
-      background: #fff7ea;
+      background: var(--panel-soft);
       outline: none;
     }
 
@@ -1075,7 +1192,7 @@
     }
 
     tbody tr:hover {
-      background: #fff7ea;
+      background: var(--panel-soft);
     }
 
     .tag {
@@ -1084,8 +1201,8 @@
       height: 24px;
       border-radius: 999px;
       padding: 0 9px;
-      background: #f3e8db;
-      color: #66503f;
+      background: #eee3d3;
+      color: #6b5948;
       font-size: 12px;
     }
 
@@ -1098,7 +1215,7 @@
 
     .mini-bar {
       height: 8px;
-      background: #eee5d8;
+      background: #e8ded0;
       border-radius: 999px;
       overflow: hidden;
     }
@@ -1273,6 +1390,135 @@
       background: var(--red);
     }
 
+
+    .brand-mark {
+      background: var(--ink);
+      box-shadow: none;
+    }
+
+    .brand strong {
+      letter-spacing: 0;
+    }
+
+    .nav button {
+      color: #4c4540;
+      font-weight: 650;
+    }
+
+    .nav button.active,
+    .nav button:hover {
+      background: rgba(255, 252, 246, .78);
+      border-color: var(--line);
+      box-shadow: none;
+    }
+
+    select,
+    input,
+    .tool-button,
+    .seg,
+    .script-tools button {
+      background: rgba(255, 252, 246, .76);
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #c9b9a6;
+      box-shadow: 0 0 0 3px rgba(201, 185, 166, .22);
+    }
+
+    .tool-button.primary {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fffaf2;
+    }
+
+    .tool-button:hover,
+    .script-tools button:hover,
+    .drawer button:hover {
+      border-color: #cdbda8;
+      transform: translateY(-1px);
+    }
+
+    .kpi,
+    .panel,
+    .project-field,
+    .pipeline-step,
+    .topic-row,
+    .shot-day,
+    .plan-row,
+    .idea-card,
+    .brief-field,
+    .emotion-card,
+    .template-card,
+    .next-action {
+      border-color: var(--line-soft);
+    }
+
+    .kpi,
+    .panel {
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      padding-top: 18px;
+    }
+
+    .kpi-value,
+    .project-title,
+    h1,
+    h2,
+    .topic-title-cell strong,
+    .shot-title,
+    .plan-title,
+    .idea-title {
+      color: var(--ink);
+    }
+
+    h1,
+    h2,
+    .project-title {
+      font-weight: 720;
+      letter-spacing: 0;
+    }
+
+    .kpi-value,
+    .project-field strong,
+    .score,
+    .time-chip {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1, "lnum" 1;
+    }
+
+    .kpi-value {
+      font-weight: 760;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .seg button.active {
+      background: #3a352f;
+      color: #fffaf2;
+    }
+
+    .status-pill,
+    .goal-chip,
+    .platform-chip,
+    .topic-pill,
+    .idea-tag,
+    .time-chip {
+      font-weight: 650;
+    }
+
+    .topic-meta-grid span,
+    .beat-list div {
+      background: #f8f1e7;
+    }
+
+    .drawer {
+      background: #2f2a25;
+      border: 1px solid rgba(255, 250, 242, .12);
+    }
+
     @media (max-width: 980px) {
       .app {
         grid-template-columns: 1fr;
@@ -1303,9 +1549,17 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
+      .pipeline-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .topic-row {
         grid-template-columns: 1fr;
         align-items: start;
+      }
+
+      .project-fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .script-brief {
@@ -1348,7 +1602,12 @@
         grid-template-columns: 1fr;
       }
 
+      .pipeline-list,
       .topic-meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-fields {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
@@ -1362,6 +1621,13 @@
 
       h1 {
         font-size: 24px;
+      }
+    }
+  
+
+    @media (max-width: 480px) {
+      .project-fields {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -1544,34 +1810,34 @@
             <div class="pipeline-step">
               <div class="step-number">1</div>
               <div>
-                <div class="step-title">新建旅行项目</div>
-                <div class="step-meta">目的地、天数、预算、人设、平台和旅行目标先定下来。</div>
+                <div class="step-title" contenteditable="true">新建旅行项目</div>
+                <div class="step-meta" contenteditable="true">目的地、天数、预算、人设、平台和旅行目标先定下来。</div>
               </div>
-              <span class="status-pill">已建</span>
+              <button class="status-pill editable-status" type="button">已建</button>
             </div>
             <div class="pipeline-step">
               <div class="step-number">2</div>
               <div>
-                <div class="step-title">生成 20 个选题</div>
-                <div class="step-meta">按攻略、故事、路线、情绪价值和商单展示拆方向。</div>
+                <div class="step-title" contenteditable="true">生成 20 个选题</div>
+                <div class="step-meta" contenteditable="true">按攻略、故事、路线、情绪价值和商单展示拆方向。</div>
               </div>
-              <span class="status-pill warm">筛选中</span>
+              <button class="status-pill warm editable-status" type="button">筛选中</button>
             </div>
             <div class="pipeline-step">
               <div class="step-number">3</div>
               <div>
-                <div class="step-title">选择 5 个生成脚本</div>
-                <div class="step-meta">为小红书图文、短视频和 B 站长视频准备不同版本。</div>
+                <div class="step-title" contenteditable="true">选择 5 个生成脚本</div>
+                <div class="step-meta" contenteditable="true">为小红书图文、短视频和 B 站长视频准备不同版本。</div>
               </div>
-              <span class="status-pill warm">待生成</span>
+              <button class="status-pill warm editable-status" type="button">待生成</button>
             </div>
             <div class="pipeline-step">
               <div class="step-number">4</div>
               <div>
-                <div class="step-title">汇总每天拍摄清单</div>
-                <div class="step-meta">把内容计划翻译成现场能执行的镜头、口播和补拍提醒。</div>
+                <div class="step-title" contenteditable="true">汇总每天拍摄清单</div>
+                <div class="step-meta" contenteditable="true">把内容计划翻译成现场能执行的镜头、口播和补拍提醒。</div>
               </div>
-              <span class="status-pill hot">关键</span>
+              <button class="status-pill hot editable-status" type="button">关键</button>
             </div>
           </div>
         </article>
@@ -1592,44 +1858,68 @@
           </div>
           <div class="topic-list">
             <div class="topic-row">
-              <div class="topic-title-cell"><strong>珀斯为什么被叫作世界上最孤独的城市？</strong><span>爆点：目的地误解 + 情绪价值，适合作为系列开篇。</span></div>
+              <div class="topic-title-cell"><strong contenteditable="true">珀斯为什么被叫作世界上最孤独的城市？</strong><span contenteditable="true">爆点：目的地误解 + 情绪价值，适合作为系列开篇。</span></div>
               <div class="topic-meta-grid">
-                <span><b>平台</b>小红书</span>
-                <span><b>类型</b>情绪价值</span>
-                <span><b>目标</b>涨粉</span>
-                <span><b>难度</b>中</span>
+                <span><b>平台</b><em contenteditable="true">小红书</em></span>
+                <span><b>类型</b><em contenteditable="true">情绪价值</em></span>
+                <span><b>目标</b><em contenteditable="true">涨粉</em></span>
+                <span><b>难度</b><em contenteditable="true">中</em></span>
               </div>
-              <span class="status-pill warm">待拍</span>
+              <span class="status-select-wrap">
+                <select class="status-select" aria-label="选题状态">
+                  <option value="待写" selected>待写</option>
+                  <option value="进行中" >进行中</option>
+                  <option value="完成" >完成</option>
+                </select>
+              </span>
             </div>
             <div class="topic-row">
-              <div class="topic-title-cell"><strong>7 天西澳路线，不赶景点也能拍够 14 条内容</strong><span>爆点：路线包 + 内容资产，后续可沉淀攻略产品。</span></div>
+              <div class="topic-title-cell"><strong contenteditable="true">7 天西澳路线，不赶景点也能拍够 14 条内容</strong><span contenteditable="true">爆点：路线包 + 内容资产，后续可沉淀攻略产品。</span></div>
               <div class="topic-meta-grid">
-                <span><b>平台</b>小红书 / 公众号</span>
-                <span><b>类型</b>路线</span>
-                <span><b>目标</b>收藏</span>
-                <span><b>难度</b>低</span>
+                <span><b>平台</b><em contenteditable="true">小红书 / 公众号</em></span>
+                <span><b>类型</b><em contenteditable="true">路线</em></span>
+                <span><b>目标</b><em contenteditable="true">收藏</em></span>
+                <span><b>难度</b><em contenteditable="true">低</em></span>
               </div>
-              <span class="status-pill">待写</span>
+              <span class="status-select-wrap">
+                <select class="status-select" aria-label="选题状态">
+                  <option value="待写" selected>待写</option>
+                  <option value="进行中" >进行中</option>
+                  <option value="完成" >完成</option>
+                </select>
+              </span>
             </div>
             <div class="topic-row">
-              <div class="topic-title-cell"><strong>淘金小镇的一天：游客会错过的三个当地故事</strong><span>爆点：人物和历史支线，提升视频厚度。</span></div>
+              <div class="topic-title-cell"><strong contenteditable="true">淘金小镇的一天：游客会错过的三个当地故事</strong><span contenteditable="true">爆点：人物和历史支线，提升视频厚度。</span></div>
               <div class="topic-meta-grid">
-                <span><b>平台</b>抖音 / B站</span>
-                <span><b>类型</b>故事</span>
-                <span><b>目标</b>作品集</span>
-                <span><b>难度</b>高</span>
+                <span><b>平台</b><em contenteditable="true">抖音 / B站</em></span>
+                <span><b>类型</b><em contenteditable="true">故事</em></span>
+                <span><b>目标</b><em contenteditable="true">作品集</em></span>
+                <span><b>难度</b><em contenteditable="true">高</em></span>
               </div>
-              <span class="status-pill warm">待脚本</span>
+              <span class="status-select-wrap">
+                <select class="status-select" aria-label="选题状态">
+                  <option value="待写" >待写</option>
+                  <option value="进行中" selected>进行中</option>
+                  <option value="完成" >完成</option>
+                </select>
+              </span>
             </div>
             <div class="topic-row">
-              <div class="topic-title-cell"><strong>珀斯旅行预算公开：交通、住宿、吃饭到底贵不贵</strong><span>爆点：价格透明 + 避坑，利于收藏和搜索流量。</span></div>
+              <div class="topic-title-cell"><strong contenteditable="true">珀斯旅行预算公开：交通、住宿、吃饭到底贵不贵</strong><span contenteditable="true">爆点：价格透明 + 避坑，利于收藏和搜索流量。</span></div>
               <div class="topic-meta-grid">
-                <span><b>平台</b>小红书</span>
-                <span><b>类型</b>避坑</span>
-                <span><b>目标</b>转化</span>
-                <span><b>难度</b>低</span>
+                <span><b>平台</b><em contenteditable="true">小红书</em></span>
+                <span><b>类型</b><em contenteditable="true">避坑</em></span>
+                <span><b>目标</b><em contenteditable="true">转化</em></span>
+                <span><b>难度</b><em contenteditable="true">低</em></span>
               </div>
-              <span class="status-pill">待写</span>
+              <span class="status-select-wrap">
+                <select class="status-select" aria-label="选题状态">
+                  <option value="待写" selected>待写</option>
+                  <option value="进行中" >进行中</option>
+                  <option value="完成" >完成</option>
+                </select>
+              </span>
             </div>
           </div>
         </article>
@@ -1648,6 +1938,8 @@
             </div>
             <div class="script-tools">
               <select id="scriptSelect" aria-label="选择脚本地图"></select>
+              <button type="button" id="addScriptRowButton">新增时间段</button>
+              <button type="button" id="deleteScriptRowButton">删除末段</button>
               <button type="button" id="newScriptButton">新建脚本</button>
               <button type="button" id="saveScriptButton">保存脚本</button>
             </div>
@@ -1797,16 +2089,51 @@
             <div class="shot-day">
               <div class="shot-day-head"><span>Day 1 · 抵达珀斯</span><span>6 个镜头</span></div>
               <div class="shot-list">
-                <div class="shot-item"><span class="shot-check"></span><div><div class="shot-title">机场到市区第一视角转场</div><div class="shot-meta">交通 · 对应选题：孤独城市开篇 · 优先级高</div></div><span class="status-pill">未拍</span></div>
-                <div class="shot-item"><span class="shot-check"></span><div><div class="shot-title">傍晚城市空镜 + 街声采样</div><div class="shot-meta">环境 · 可用于所有平台开头和 B-roll</div></div><span class="status-pill warm">必拍</span></div>
-                <div class="shot-item"><span class="shot-check"></span><div><div class="shot-title">30 秒口播：为什么选择珀斯</div><div class="shot-meta">口播 · 给后期脚本留人物线</div></div><span class="status-pill hot">缺口</span></div>
+                <div class="shot-item"><button class="shot-check" type="button" aria-label="切换拍摄状态"></button><div><div class="shot-title" contenteditable="true">机场到市区第一视角转场</div><div class="shot-meta" contenteditable="true">交通 · 对应选题：孤独城市开篇 · 优先级高</div></div><span class="status-select-wrap">
+                  <select class="status-select" aria-label="拍摄状态">
+                    <option value="未拍" selected>未拍</option>
+                    <option value="必拍" >必拍</option>
+                    <option value="缺口" >缺口</option>
+                    <option value="已拍" >已拍</option>
+                  </select>
+                </span></div>
+                <div class="shot-item"><button class="shot-check" type="button" aria-label="切换拍摄状态"></button><div><div class="shot-title" contenteditable="true">傍晚城市空镜 + 街声采样</div><div class="shot-meta" contenteditable="true">环境 · 可用于所有平台开头和 B-roll</div></div><span class="status-select-wrap">
+                  <select class="status-select" aria-label="拍摄状态">
+                    <option value="未拍" >未拍</option>
+                    <option value="必拍" selected>必拍</option>
+                    <option value="缺口" >缺口</option>
+                    <option value="已拍" >已拍</option>
+                  </select>
+                </span></div>
+                <div class="shot-item"><button class="shot-check" type="button" aria-label="切换拍摄状态"></button><div><div class="shot-title" contenteditable="true">30 秒口播：为什么选择珀斯</div><div class="shot-meta" contenteditable="true">口播 · 给后期脚本留人物线</div></div><span class="status-select-wrap">
+                  <select class="status-select" aria-label="拍摄状态">
+                    <option value="未拍" >未拍</option>
+                    <option value="必拍" >必拍</option>
+                    <option value="缺口" selected>缺口</option>
+                    <option value="已拍" >已拍</option>
+                  </select>
+                </span></div>
               </div>
             </div>
             <div class="shot-day">
               <div class="shot-day-head"><span>Day 2 · 海边和咖啡店</span><span>8 个镜头</span></div>
               <div class="shot-list">
-                <div class="shot-item"><span class="shot-check"></span><div><div class="shot-title">海边远景、脚步、风声</div><div class="shot-meta">环境 · 情绪价值视频主素材</div></div><span class="status-pill warm">必拍</span></div>
-                <div class="shot-item"><span class="shot-check"></span><div><div class="shot-title">咖啡店价格牌和点单过程</div><div class="shot-meta">细节 · 预算公开 / 攻略产品素材</div></div><span class="status-pill">未拍</span></div>
+                <div class="shot-item"><button class="shot-check" type="button" aria-label="切换拍摄状态"></button><div><div class="shot-title" contenteditable="true">海边远景、脚步、风声</div><div class="shot-meta" contenteditable="true">环境 · 情绪价值视频主素材</div></div><span class="status-select-wrap">
+                  <select class="status-select" aria-label="拍摄状态">
+                    <option value="未拍" >未拍</option>
+                    <option value="必拍" selected>必拍</option>
+                    <option value="缺口" >缺口</option>
+                    <option value="已拍" >已拍</option>
+                  </select>
+                </span></div>
+                <div class="shot-item"><button class="shot-check" type="button" aria-label="切换拍摄状态"></button><div><div class="shot-title" contenteditable="true">咖啡店价格牌和点单过程</div><div class="shot-meta" contenteditable="true">细节 · 预算公开 / 攻略产品素材</div></div><span class="status-select-wrap">
+                  <select class="status-select" aria-label="拍摄状态">
+                    <option value="未拍" selected>未拍</option>
+                    <option value="必拍" >必拍</option>
+                    <option value="缺口" >缺口</option>
+                    <option value="已拍" >已拍</option>
+                  </select>
+                </span></div>
               </div>
             </div>
           </div>
@@ -1906,7 +2233,7 @@
                 <div class="plan-title" contenteditable="true">发布：淘金小镇当地故事</div>
                 <div class="plan-meta" contenteditable="true">平台：B站 / 抖音 · 目标：作品集 · 状态：待脚本</div>
               </div>
-              <span class="status-pill warm">待脚本</span>
+              <button class="status-pill warm editable-status" type="button">待脚本</button>
             </div>
           </div>
         </article>
@@ -2650,6 +2977,44 @@
       })).filter(row => Object.values(row).some(Boolean));
     }
 
+    function nextScriptTime(rows) {
+      const last = rows.at(-1)?.time || "";
+      const match = String(last).match(/(\d+)\s*-\s*(\d+)s?/);
+      if (!match) return `${rows.length * 10}-${rows.length * 10 + 10}s`;
+      const start = Number(match[2]);
+      return `${start}-${start + Math.max(5, Number(match[2]) - Number(match[1]))}s`;
+    }
+
+    function addScriptRow() {
+      const rows = collectScriptRows();
+      rows.push({
+        time: nextScriptTime(rows),
+        main: "新增地点主线",
+        branch: "补充当地故事或信息点",
+        shot: "需要拍到的镜头 / 声音素材",
+        line: "旁白或字幕",
+        emotion: "情绪"
+      });
+      renderScriptRows(rows);
+      requestAnimationFrame(() => {
+        const lastRow = els.scriptRows.querySelector("tr:last-child");
+        lastRow?.scrollIntoView({ behavior: "smooth", block: "center" });
+        lastRow?.querySelector('[data-script-field="time"]')?.focus();
+      });
+      els.loadStatus.textContent = "已新增时间段，编辑后点击保存脚本";
+    }
+
+    function deleteScriptRow() {
+      const rows = collectScriptRows();
+      if (rows.length <= 1) {
+        els.loadStatus.textContent = "至少保留一个时间段";
+        return;
+      }
+      rows.pop();
+      renderScriptRows(rows);
+      els.loadStatus.textContent = "已删除末段，编辑后点击保存脚本";
+    }
+
     function renderEmotionEditor(emotions) {
       const nodes = Array.isArray(emotions) && emotions.length ? emotions : structuredClone(defaultEmotionNodes);
       els.emotionEditor.innerHTML = nodes.map(node => {
@@ -2964,6 +3329,59 @@
       });
     });
 
+    function applyStatusSelectClass(select) {
+      const wrap = select.closest(".status-select-wrap");
+      if (!wrap) return;
+      wrap.classList.remove("todo", "in-progress", "done");
+      if (["完成", "已拍"].includes(select.value)) wrap.classList.add("done");
+      else if (["进行中", "必拍"].includes(select.value)) wrap.classList.add("in-progress");
+      else wrap.classList.add("todo");
+    }
+
+    document.querySelectorAll(".status-select").forEach(applyStatusSelectClass);
+    document.addEventListener("change", event => {
+      const select = event.target.closest(".status-select");
+      if (!select) return;
+      applyStatusSelectClass(select);
+      els.loadStatus.textContent = `已将状态改为：${select.value}`;
+    });
+
+    const statusCycle = {
+      "已建": ["已建", "进行中", "完成"],
+      "筛选中": ["筛选中", "待处理", "完成"],
+      "待生成": ["待生成", "生成中", "完成"],
+      "关键": ["关键", "普通", "完成"],
+      "待拍": ["待拍", "已拍", "需补拍"],
+      "待写": ["待写", "待剪", "待发", "已发布"],
+      "待脚本": ["待脚本", "待拍", "待剪", "已发布"],
+      "未拍": ["未拍", "已拍", "需补拍"],
+      "必拍": ["必拍", "已拍", "需补拍"],
+      "缺口": ["缺口", "需补拍", "已拍"]
+    };
+
+    function statusClass(label) {
+      if (["已建", "完成", "已拍", "已发布"].includes(label)) return "status-pill editable-status";
+      if (["关键", "缺口", "需补拍"].includes(label)) return "status-pill hot editable-status";
+      return "status-pill warm editable-status";
+    }
+
+    document.addEventListener("click", event => {
+      const status = event.target.closest(".editable-status");
+      if (status) {
+        const current = status.textContent.trim();
+        const cycle = statusCycle[current] || [current, "完成"];
+        const next = cycle[(cycle.indexOf(current) + 1) % cycle.length] || cycle[0];
+        status.textContent = next;
+        status.className = statusClass(next);
+        els.loadStatus.textContent = "已更新状态，静态模块会保存在当前页面预览中";
+      }
+      const check = event.target.closest(".shot-check");
+      if (check) {
+        check.classList.toggle("done");
+        els.loadStatus.textContent = check.classList.contains("done") ? "已标记镜头完成" : "已取消镜头完成标记";
+      }
+    });
+
     const navTargets = [
       { view: "overview", selector: ".topbar" },
       { view: "project", selector: "#projectSection" },
@@ -3024,6 +3442,8 @@
       renderScriptMap(currentScriptIndex);
       els.loadStatus.textContent = "已新建脚本，编辑后点击保存脚本";
     });
+    document.querySelector("#addScriptRowButton").addEventListener("click", addScriptRow);
+    document.querySelector("#deleteScriptRowButton").addEventListener("click", deleteScriptRow);
     document.querySelector("#saveScriptButton").addEventListener("click", saveCurrentScriptMap);
 
     [els.range, els.type, els.metric, els.search].forEach(el => {
