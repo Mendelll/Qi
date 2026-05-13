@@ -74,13 +74,11 @@
     .brand-mark {
       width: 42px;
       height: 42px;
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      background: var(--red);
-      color: white;
-      font-weight: 800;
-      letter-spacing: 0;
+      border-radius: 999px;
+      display: block;
+      object-fit: cover;
+      object-position: 66% 45%;
+      border: 1px solid rgba(223, 211, 194, .9);
       box-shadow: var(--shadow);
     }
 
@@ -1391,11 +1389,6 @@
     }
 
 
-    .brand-mark {
-      background: var(--ink);
-      box-shadow: none;
-    }
-
     .brand strong {
       letter-spacing: 0;
     }
@@ -1636,7 +1629,7 @@
   <div class="app">
     <aside>
       <div class="brand">
-        <div class="brand-mark">奇</div>
+        <img class="brand-mark" src="assets/avatar.jpg" alt="奇仔头像">
         <div>
           <strong>奇仔的旅行内容工作台</strong>
           <span>旅游博主经营系统</span>
