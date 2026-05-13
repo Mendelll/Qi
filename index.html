@@ -558,6 +558,154 @@
       font-size: 12px;
     }
 
+    .project-switcher {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 12px;
+    }
+
+    .project-switcher-main {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .project-switcher label {
+      display: grid;
+      gap: 5px;
+      min-width: min(360px, 100%);
+    }
+
+    .project-switcher select {
+      min-width: 280px;
+      max-width: 100%;
+    }
+
+    .project-switcher .field {
+      width: fit-content;
+      display: inline-flex;
+      grid-template-columns: none;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .project-switcher .field input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--green);
+    }
+
+    .project-switcher-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .project-switcher-meta {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .mobile-quick {
+      display: none;
+      margin-bottom: 14px;
+      padding: 16px;
+    }
+
+    .quick-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 13px;
+    }
+
+    .quick-head h2 {
+      font-size: 20px;
+    }
+
+    .quick-date {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .quick-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .quick-card {
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .quick-card-title {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .quick-item {
+      display: grid;
+      grid-template-columns: 22px 1fr auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .quick-item strong,
+    .quick-item span {
+      display: block;
+      line-height: 1.45;
+    }
+
+    .quick-item strong {
+      font-size: 14px;
+    }
+
+    .quick-item span {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .quick-status {
+      min-height: 26px;
+      align-self: start;
+    }
+
+    .quick-note {
+      width: 100%;
+      min-height: 88px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 10px;
+      color: var(--ink);
+      font: inherit;
+      line-height: 1.55;
+      outline: none;
+      white-space: pre-wrap;
+    }
+
+    .quick-note:focus {
+      box-shadow: 0 0 0 3px rgba(201, 185, 166, .22);
+    }
+
 
 
     .project-system {
@@ -1533,6 +1681,7 @@
       }
 
       .kpis,
+      .project-switcher,
       .project-system,
       .module-grid,
       .strategy-grid,
@@ -1565,12 +1714,17 @@
         padding: 18px 14px;
       }
 
+      aside .filters {
+        display: none;
+      }
+
       .topbar,
       .panel-head {
         display: grid;
       }
 
       .actions,
+      .project-switcher-actions,
       .table-tools,
       .drawer-actions {
         justify-content: flex-start;
@@ -1582,6 +1736,7 @@
 
       .filters,
       .kpis,
+      .project-switcher,
       .project-system,
       .module-grid,
       .strategy-grid,
@@ -1606,6 +1761,10 @@
 
       .status-pill {
         justify-self: start;
+      }
+
+      .mobile-quick {
+        display: block;
       }
 
       .search {
@@ -1710,6 +1869,81 @@
           </button>
         </div>
       </div>
+
+      <section class="panel mobile-quick" id="mobileQuickMode" aria-label="手机端快速模式">
+        <div class="quick-head">
+          <div>
+            <h2>今日快速模式</h2>
+            <span class="table-meta">路上只看今天要推进的事</span>
+          </div>
+          <span class="quick-date" contenteditable="true">Day 1 · 抵达珀斯</span>
+        </div>
+        <div class="quick-grid">
+          <article class="quick-card">
+            <div class="quick-card-title">今日要拍</div>
+            <div class="quick-item">
+              <button class="shot-check" type="button" aria-label="切换完成状态"></button>
+              <div>
+                <strong contenteditable="true">机场到市区第一视角转场</strong>
+                <span contenteditable="true">交通、车窗、第一句城市感受</span>
+              </div>
+              <button class="status-pill warm editable-status quick-status" type="button">未拍</button>
+            </div>
+            <div class="quick-item">
+              <button class="shot-check" type="button" aria-label="切换完成状态"></button>
+              <div>
+                <strong contenteditable="true">傍晚城市空镜 + 街声采样</strong>
+                <span contenteditable="true">可做开头和 B-roll，优先补自然声</span>
+              </div>
+              <button class="status-pill hot editable-status quick-status" type="button">缺口</button>
+            </div>
+          </article>
+          <article class="quick-card">
+            <div class="quick-card-title">今日要写</div>
+            <div class="quick-item">
+              <button class="shot-check" type="button" aria-label="切换完成状态"></button>
+              <div>
+                <strong contenteditable="true">珀斯孤独城市开篇</strong>
+                <span contenteditable="true">先写反差钩子，再补路线和收藏理由</span>
+              </div>
+              <button class="status-pill warm editable-status quick-status" type="button">待写</button>
+            </div>
+          </article>
+          <article class="quick-card">
+            <div class="quick-card-title">素材缺口</div>
+            <div class="quick-item">
+              <button class="shot-check" type="button" aria-label="切换完成状态"></button>
+              <div>
+                <strong contenteditable="true">价格牌 / 地图截图 / 一句当地采访</strong>
+                <span contenteditable="true">优先补能提升收藏率的信息素材</span>
+              </div>
+              <button class="status-pill hot editable-status quick-status" type="button">关键</button>
+            </div>
+          </article>
+          <article class="quick-card">
+            <div class="quick-card-title">快速灵感</div>
+            <div class="quick-note" contenteditable="true">今天先记录一个反差：珀斯不是无聊，是终于没有人催你快一点。</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel project-switcher" aria-label="旅行项目切换">
+        <div class="project-switcher-main">
+          <label>
+            <span class="filter-label">当前项目</span>
+            <select id="projectSelect"></select>
+          </label>
+          <label class="field">
+            <input id="showArchivedProjects" type="checkbox">
+            显示归档
+          </label>
+          <span class="project-switcher-meta" id="projectMeta">每个旅行项目会独立保存工作台内容。</span>
+        </div>
+        <div class="project-switcher-actions">
+          <button class="tool-button" type="button" id="newProjectButton">新建项目</button>
+          <button class="tool-button" type="button" id="archiveProjectButton">归档项目</button>
+        </div>
+      </section>
 
       <section class="kpis" aria-label="关键指标">
         <article class="kpi">
@@ -2339,11 +2573,14 @@
       notes: [],
       scriptMaps: [],
       scriptMapsUpdatedAt: 0,
-      staticWorkbench: []
+      staticWorkbench: [],
+      activeProjectId: "",
+      workbenchProjects: []
     };
 
     const SCRIPT_MAPS_KEY = "qizai-travel-script-maps-v1";
     const STATIC_WORKBENCH_KEY = "qizai-travel-workbench-static-v1";
+    const WORKBENCH_PROJECTS_KEY = "qizai-travel-projects-v1";
 
     let data = structuredClone(emptyData);
     let currentChart = "followers";
@@ -2352,6 +2589,8 @@
     let currentScriptIndex = 0;
     let staticSaveTimer = null;
     let scriptSaveTimer = null;
+    let currentProjectId = "";
+    let showArchivedProjects = false;
 
     const els = {
       range: document.querySelector("#rangeSelect"),
@@ -2388,7 +2627,12 @@
       scriptRows: document.querySelector("#scriptRows"),
       emotionCurve: document.querySelector("#emotionCurve"),
       emotionLabels: document.querySelector("#emotionLabels"),
-      emotionEditor: document.querySelector("#emotionEditor")
+      emotionEditor: document.querySelector("#emotionEditor"),
+      projectSelect: document.querySelector("#projectSelect"),
+      projectMeta: document.querySelector("#projectMeta"),
+      showArchivedProjects: document.querySelector("#showArchivedProjects"),
+      newProjectButton: document.querySelector("#newProjectButton"),
+      archiveProjectButton: document.querySelector("#archiveProjectButton")
     };
 
     const importColumns = ["date", "title", "type", "tag", "reads", "likes", "collects", "comments", "shares", "followers"];
@@ -2821,8 +3065,14 @@
         scriptMapsUpdatedAt: Number(nextData.scriptMapsUpdatedAt || 0),
         staticWorkbench: nextData.staticWorkbench && (Array.isArray(nextData.staticWorkbench) || Array.isArray(nextData.staticWorkbench.items))
           ? nextData.staticWorkbench
-          : []
+          : [],
+        activeProjectId: typeof nextData.activeProjectId === "string" ? nextData.activeProjectId : "",
+        workbenchProjects: Array.isArray(nextData.workbenchProjects) ? nextData.workbenchProjects : []
       };
+    }
+
+    function isFilePreview() {
+      return window.location.protocol === "file:";
     }
 
     function defaultScriptMap(title = "珀斯为什么被叫作世界上最孤独的城市？") {
@@ -2845,6 +3095,20 @@
     }
 
     async function loadDataFile() {
+      if (isFilePreview()) {
+        data = normalizeData({
+          ...structuredClone(emptyData),
+          message: "当前是本地文件预览，项目可编辑但不会同步到数据库。建议用 http://127.0.0.1:4174/ 打开。"
+        });
+        ensureScriptMaps();
+        restoreScriptMapsState();
+        render();
+        renderScriptSelector();
+        renderScriptMap(currentScriptIndex);
+        restoreStaticWorkbenchState();
+        initProjectManager();
+        return;
+      }
       try {
         const response = await fetch("/api/dashboard", { cache: "no-store" });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -2864,10 +3128,15 @@
       renderScriptSelector();
       renderScriptMap(currentScriptIndex);
       restoreStaticWorkbenchState();
+      initProjectManager();
     }
 
     async function saveDataFile() {
       const baseMessage = data.message;
+      if (isFilePreview()) {
+        data.message = `${baseMessage}，当前为本地文件预览，未连接数据库`;
+        return;
+      }
       try {
         data.message = `${baseMessage}，已保存到数据库`;
         const response = await fetch("/api/dashboard", {
@@ -2949,7 +3218,9 @@
         notes,
         scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? data.scriptMaps : [defaultScriptMap()],
         scriptMapsUpdatedAt: Number(data.scriptMapsUpdatedAt || 0),
-        staticWorkbench: data.staticWorkbench
+        staticWorkbench: data.staticWorkbench,
+        activeProjectId: data.activeProjectId,
+        workbenchProjects: data.workbenchProjects
       });
     }
 
@@ -3115,11 +3386,16 @@
     function saveScriptMapsState(message = "脚本地图正在自动保存") {
       storeCurrentScriptMap();
       markScriptMapsChanged();
+      saveActiveProjectState();
       els.loadStatus.textContent = message;
       scheduleScriptMapsSync();
     }
 
     async function syncScriptMapsState() {
+      if (isFilePreview()) {
+        els.loadStatus.textContent = "脚本地图已保存在本机；当前文件预览不会线上同步";
+        return;
+      }
       try {
         const response = await fetch("/api/dashboard", {
           method: "POST",
@@ -3153,6 +3429,7 @@
     async function saveCurrentScriptMap() {
       storeCurrentScriptMap();
       markScriptMapsChanged();
+      saveActiveProjectState();
       const baseMessage = data.message || "脚本地图已更新";
       data.message = "脚本地图已保存";
       await saveDataFile();
@@ -3203,7 +3480,9 @@
         notes,
         scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? data.scriptMaps : [defaultScriptMap()],
         scriptMapsUpdatedAt: Number(data.scriptMapsUpdatedAt || 0),
-        staticWorkbench: data.staticWorkbench
+        staticWorkbench: data.staticWorkbench,
+        activeProjectId: data.activeProjectId,
+        workbenchProjects: data.workbenchProjects
       });
     }
 
@@ -3449,7 +3728,11 @@
       "#shotsSection .status-select",
       "#shotsSection .shot-check",
       ".workspace [contenteditable=\"true\"]",
-      ".workspace .editable-status"
+      ".workspace .editable-status",
+      "#mobileQuickMode [contenteditable=\"true\"]",
+      "#mobileQuickMode .editable-status",
+      "#mobileQuickMode .shot-check",
+      "#mobileQuickMode textarea"
     ];
 
     function staticPersistNodes() {
@@ -3458,6 +3741,7 @@
 
     function staticNodeState(node) {
       if (node.matches("select")) return { value: node.value };
+      if (node.matches("textarea")) return { value: node.value };
       if (node.matches(".shot-check")) return { done: node.classList.contains("done") };
       if (node.matches(".editable-status")) return { text: node.textContent.trim(), className: node.className };
       return { html: node.innerHTML };
@@ -3468,6 +3752,10 @@
       if (node.matches("select")) {
         node.value = state.value || node.value;
         applyStatusSelectClass(node);
+        return;
+      }
+      if (node.matches("textarea")) {
+        node.value = typeof state.value === "string" ? state.value : node.value;
         return;
       }
       if (node.matches(".shot-check")) {
@@ -3507,6 +3795,7 @@
       const record = { updatedAt: Date.now(), items: staticWorkbenchItems() };
       data.staticWorkbench = record;
       localStorage.setItem(STATIC_WORKBENCH_KEY, JSON.stringify(record));
+      saveActiveProjectState();
       scheduleStaticWorkbenchSync();
     }
 
@@ -3516,6 +3805,10 @@
     }
 
     async function syncStaticWorkbenchState() {
+      if (isFilePreview()) {
+        els.loadStatus.textContent = "已保存到本机；当前文件预览不会线上同步";
+        return;
+      }
       try {
         const response = await fetch("/api/dashboard", {
           method: "POST",
@@ -3543,15 +3836,208 @@
       }
     }
 
+    function projectTitleFromState(project) {
+      const item = project?.staticWorkbench?.items?.[0];
+      const fallback = project?.name || "未命名旅行项目";
+      if (!item?.html) return fallback;
+      const label = item.html.replace(/<[^>]*>/g, "").trim();
+      return label || fallback;
+    }
+
+    function projectDestinationFromState(project) {
+      const item = project?.staticWorkbench?.items?.[2];
+      if (!item?.html) return "";
+      return item.html.replace(/<[^>]*>/g, "").trim();
+    }
+
+    function normalizeProject(project) {
+      const id = project?.id || `project-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      const staticRecord = normalizeStaticWorkbenchRecord(project?.staticWorkbench);
+      return {
+        id,
+        name: project?.name || projectTitleFromState({ staticWorkbench: staticRecord }) || "未命名旅行项目",
+        archived: Boolean(project?.archived),
+        updatedAt: Number(project?.updatedAt || 0),
+        staticWorkbench: staticRecord,
+        scriptMaps: Array.isArray(project?.scriptMaps) && project.scriptMaps.length ? project.scriptMaps : [defaultScriptMap()],
+        scriptMapsUpdatedAt: Number(project?.scriptMapsUpdatedAt || 0),
+        currentScriptIndex: Number(project?.currentScriptIndex || 0)
+      };
+    }
+
+    function currentProjectSnapshot() {
+      storeCurrentScriptMap();
+      const staticRecord = { updatedAt: Date.now(), items: staticWorkbenchItems() };
+      const title = staticRecord.items[0]?.html?.replace(/<[^>]*>/g, "").trim() || "未命名旅行项目";
+      return {
+        id: currentProjectId || data.activeProjectId || `project-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        name: title,
+        archived: false,
+        updatedAt: Date.now(),
+        staticWorkbench: staticRecord,
+        scriptMaps: Array.isArray(data.scriptMaps) && data.scriptMaps.length ? structuredClone(data.scriptMaps) : [defaultScriptMap()],
+        scriptMapsUpdatedAt: Number(data.scriptMapsUpdatedAt || Date.now()),
+        currentScriptIndex
+      };
+    }
+
+    function localProjectsRecord() {
+      try {
+        const record = JSON.parse(localStorage.getItem(WORKBENCH_PROJECTS_KEY) || "null");
+        if (record && Array.isArray(record.projects)) {
+          return {
+            updatedAt: Number(record.updatedAt || 0),
+            activeProjectId: record.activeProjectId || "",
+            projects: record.projects.map(normalizeProject)
+          };
+        }
+      } catch (error) {
+        localStorage.removeItem(WORKBENCH_PROJECTS_KEY);
+      }
+      return { updatedAt: 0, activeProjectId: "", projects: [] };
+    }
+
+    function persistProjectsLocal() {
+      localStorage.setItem(WORKBENCH_PROJECTS_KEY, JSON.stringify({
+        updatedAt: Date.now(),
+        activeProjectId: currentProjectId,
+        projects: data.workbenchProjects
+      }));
+    }
+
+    function saveActiveProjectState() {
+      if (!Array.isArray(data.workbenchProjects) || !data.workbenchProjects.length) return;
+      const snapshot = currentProjectSnapshot();
+      const previous = data.workbenchProjects.find(project => project.id === snapshot.id);
+      if (previous) snapshot.archived = Boolean(previous.archived);
+      data.workbenchProjects = data.workbenchProjects.map(project => project.id === snapshot.id ? snapshot : project);
+      data.activeProjectId = snapshot.id;
+      data.staticWorkbench = snapshot.staticWorkbench;
+      data.scriptMaps = snapshot.scriptMaps;
+      data.scriptMapsUpdatedAt = snapshot.scriptMapsUpdatedAt;
+      currentProjectId = snapshot.id;
+      persistProjectsLocal();
+      renderProjectSwitcher();
+    }
+
+    function applyProjectState(project) {
+      const normalized = normalizeProject(project);
+      currentProjectId = normalized.id;
+      data.activeProjectId = normalized.id;
+      data.staticWorkbench = normalized.staticWorkbench;
+      data.scriptMaps = structuredClone(normalized.scriptMaps);
+      data.scriptMapsUpdatedAt = normalized.scriptMapsUpdatedAt;
+      currentScriptIndex = Math.min(Math.max(normalized.currentScriptIndex || 0, 0), data.scriptMaps.length - 1);
+      staticPersistNodes().forEach((node, index) => applyStaticNodeState(node, normalized.staticWorkbench.items[index]));
+      document.querySelectorAll(".status-select").forEach(applyStatusSelectClass);
+      renderScriptSelector();
+      renderScriptMap(currentScriptIndex);
+      persistScriptMapsLocal();
+      localStorage.setItem(STATIC_WORKBENCH_KEY, JSON.stringify(normalized.staticWorkbench));
+      persistProjectsLocal();
+    }
+
+    function initProjectManager() {
+      const serverProjects = Array.isArray(data.workbenchProjects) ? data.workbenchProjects.map(normalizeProject) : [];
+      const localRecord = localProjectsRecord();
+      const localIsNewer = localRecord.updatedAt > Math.max(...serverProjects.map(project => project.updatedAt), 0);
+      data.workbenchProjects = localIsNewer && localRecord.projects.length ? localRecord.projects : serverProjects;
+      currentProjectId = localIsNewer ? localRecord.activeProjectId : data.activeProjectId;
+      if (!data.workbenchProjects.length) {
+        const firstProject = currentProjectSnapshot();
+        data.workbenchProjects = [firstProject];
+        currentProjectId = firstProject.id;
+      }
+      if (!data.workbenchProjects.some(project => project.id === currentProjectId)) {
+        currentProjectId = data.workbenchProjects.find(project => !project.archived)?.id || data.workbenchProjects[0].id;
+      }
+      const activeProject = data.workbenchProjects.find(project => project.id === currentProjectId);
+      applyProjectState(activeProject);
+      renderProjectSwitcher();
+      if (localIsNewer) scheduleStaticWorkbenchSync(200);
+    }
+
+    function visibleProjects() {
+      const projects = Array.isArray(data.workbenchProjects) ? data.workbenchProjects : [];
+      return showArchivedProjects ? projects : projects.filter(project => !project.archived || project.id === currentProjectId);
+    }
+
+    function renderProjectSwitcher() {
+      if (!els.projectSelect) return;
+      const projects = visibleProjects();
+      els.projectSelect.innerHTML = projects.map(project => {
+        const archivedText = project.archived ? "（已归档）" : "";
+        return `<option value="${project.id}" ${project.id === currentProjectId ? "selected" : ""}>${escapeHtml(projectTitleFromState(project))}${archivedText}</option>`;
+      }).join("");
+      const activeProject = data.workbenchProjects.find(project => project.id === currentProjectId);
+      const destination = projectDestinationFromState(activeProject);
+      els.projectMeta.textContent = `${activeProject?.archived ? "已归档" : "进行中"} · ${destination || "未填写目的地"} · 共 ${data.workbenchProjects.length} 个项目`;
+      els.archiveProjectButton.textContent = activeProject?.archived ? "恢复项目" : "归档项目";
+      els.showArchivedProjects.checked = showArchivedProjects;
+    }
+
+    function switchProject(projectId) {
+      if (!projectId || projectId === currentProjectId) return;
+      saveActiveProjectState();
+      const nextProject = data.workbenchProjects.find(project => project.id === projectId);
+      if (!nextProject) return;
+      applyProjectState(nextProject);
+      renderProjectSwitcher();
+      els.loadStatus.textContent = `已切换到：${projectTitleFromState(nextProject)}`;
+    }
+
+    function createProject() {
+      saveActiveProjectState();
+      const project = normalizeProject({
+        name: `新旅行项目 ${data.workbenchProjects.length + 1}`,
+        staticWorkbench: { updatedAt: Date.now(), items: staticWorkbenchItems() },
+        scriptMaps: [defaultScriptMap(`新脚本 ${data.workbenchProjects.length + 1}`)],
+        scriptMapsUpdatedAt: Date.now()
+      });
+      project.staticWorkbench.items[0] = { html: project.name };
+      project.staticWorkbench.items[1] = { html: "定位：填写这次旅行的内容方向、目标人群和产出节奏。" };
+      project.staticWorkbench.items[2] = { html: "目的地待定" };
+      data.workbenchProjects.push(project);
+      applyProjectState(project);
+      renderProjectSwitcher();
+      saveStaticWorkbenchState();
+      els.loadStatus.textContent = "已新建旅行项目，开始填写后会自动保存";
+    }
+
+    function toggleArchiveProject() {
+      saveActiveProjectState();
+      const activeProject = data.workbenchProjects.find(project => project.id === currentProjectId);
+      if (!activeProject) return;
+      const activeCount = data.workbenchProjects.filter(project => !project.archived).length;
+      if (!activeProject.archived && activeCount <= 1) {
+        els.loadStatus.textContent = "至少保留一个进行中的项目";
+        return;
+      }
+      activeProject.archived = !activeProject.archived;
+      activeProject.updatedAt = Date.now();
+      if (activeProject.archived) {
+        const nextProject = data.workbenchProjects.find(project => !project.archived && project.id !== activeProject.id);
+        if (nextProject) applyProjectState(nextProject);
+      } else {
+        applyProjectState(activeProject);
+      }
+      persistProjectsLocal();
+      scheduleStaticWorkbenchSync(200);
+      renderProjectSwitcher();
+      els.loadStatus.textContent = activeProject.archived ? "项目已归档" : "项目已恢复";
+    }
+
     window.addEventListener("beforeunload", () => {
       storeCurrentScriptMap();
       markScriptMapsChanged();
+      saveActiveProjectState();
       const localStaticRecord = localStaticWorkbenchRecord();
       if (localStaticRecord.items.length) {
         data.staticWorkbench = localStaticRecord;
       }
       window.clearTimeout(staticSaveTimer);
       window.clearTimeout(scriptSaveTimer);
+      if (isFilePreview()) return;
       navigator.sendBeacon?.("/api/dashboard", new Blob([JSON.stringify(data)], { type: "application/json" }));
     });
 
@@ -3594,8 +4080,9 @@
     });
 
     document.addEventListener("input", event => {
-      if (!event.target.closest('[contenteditable="true"]')) return;
-      if (!staticPersistNodes().includes(event.target.closest('[contenteditable="true"]'))) return;
+      const target = event.target.closest('[contenteditable="true"], textarea');
+      if (!target) return;
+      if (!staticPersistNodes().includes(target)) return;
       saveStaticWorkbenchState();
       els.loadStatus.textContent = "正在同步";
     });
@@ -3679,6 +4166,13 @@
     document.querySelector("#addScriptRowButton").addEventListener("click", addScriptRow);
     document.querySelector("#deleteScriptRowButton").addEventListener("click", deleteScriptRow);
     document.querySelector("#saveScriptButton").addEventListener("click", saveCurrentScriptMap);
+    els.projectSelect.addEventListener("change", event => switchProject(event.target.value));
+    els.newProjectButton.addEventListener("click", createProject);
+    els.archiveProjectButton.addEventListener("click", toggleArchiveProject);
+    els.showArchivedProjects.addEventListener("change", event => {
+      showArchivedProjects = event.target.checked;
+      renderProjectSwitcher();
+    });
 
     [els.range, els.type, els.metric, els.search].forEach(el => {
       el.addEventListener("input", render);
